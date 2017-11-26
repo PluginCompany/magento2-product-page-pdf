@@ -1,0 +1,25 @@
+{
+    "name": "PluginCompany/ProductPdf",
+    "description": "",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0|~7.1",
+        "mpdf/mpdf": "~7.0"
+    },
+    "type": "magento2-module",
+    "version": "100.0.0",
+    "license": "MIT",
+    "homepage": "https://plugin.company/magento-extensions/product-page-pdf.html",
+    "support": {
+        "issues": "https://github.com/PluginCompany/magento2-product-page-pdf/issues",
+        "source": "https://github.com/PluginCompany/magento2-product-page-pdf",
+        "docs": "https://plugin.company/knowledge-base/docs/magento2-product-page-pdf/"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "PluginCompany\\ProductPdf\\": ""
+        }
+    }
+}
