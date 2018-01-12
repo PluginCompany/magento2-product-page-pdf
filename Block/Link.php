@@ -37,16 +37,13 @@ class Link extends Template {
 
     public function __construct(
         Context $context,
-        StoreManagerInterface $storeManager,
         Registry $registry,
-        ScopeConfigInterface $scopeConfig,
-        array $data = [],
-        UrlInterface $url
+        array $data = []
     ){
-        $this->storeManager = $storeManager;
+        $this->storeManager = $context->getStoreManager();
         $this->registry = $registry;
-        $this->scopeConfig = $scopeConfig;
-        $this->frameworkUrl = $url;
+        $this->scopeConfig = $context->getScopeConfig();
+        $this->frameworkUrl = $context->getUrlBuilder();
         parent::__construct(
             $context,
             $data

@@ -7,11 +7,14 @@
  */
 namespace PluginCompany\ProductPdf\Helper;
 
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+
 class ImageCompare
-    extends \Magento\Framework\App\Helper\AbstractHelper
+    extends AbstractHelper
 {
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context
+        Context $context
     ) {
         parent::__construct(
             $context
@@ -44,8 +47,6 @@ class ImageCompare
                 $colorMeanOne[1][$x] * 0.8 > $colorMeanTwo[1][$x]
                 || $colorMeanOne[1][$x] * 1.2 < $colorMeanTwo[1][$x]
             ) {
-                $color1 = $colorMeanOne[1][$x];
-                $color2 = $colorMeanTwo[1][$x];
                 $hammeringDistance++;
             }
         }
@@ -127,20 +128,6 @@ class ImageCompare
         }
 
         return array($colorSum/64,$colorList);
-    }
-    /**
-     * Returns an array with 1 and zeros. If a color is bigger than the mean value of colors it is 1
-     *
-     * @param array $colorMean Color Mean details.
-     *
-     * @return array
-     */
-    private function bits($colorMean) {
-        $bits = array();
-        foreach ($colorMean[1] as $color) {
-            $bits[] = ($color >= $colorMean[0]) ? 1 : 0;
-        }
-        return $bits;
     }
 
 }

@@ -5,8 +5,9 @@
  * This file is part of Product Page PDF for Magento 2, released under the MIT License.
  * See the LICENSE file in the project root.
  */
-
 namespace PluginCompany\ProductPdf\Model\System\Config\Source;
+
+use Magento\Framework\Option\ArrayInterface;
 
 class GalleryStyle implements ArrayInterface
 {

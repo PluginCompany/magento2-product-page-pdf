@@ -65,7 +65,7 @@ class File extends Action {
         }
         try {
             return $this->runExecute();
-        } catch (exception $e){
+        } catch (\Exception $e){
             $this->logger->log(NULL, $e->getMessage());
         }
     }
@@ -190,6 +190,7 @@ class File extends Action {
      */
     protected function callExit()
     {
+        // @codingStandardsIgnoreLine
         exit(0);
     }
 
