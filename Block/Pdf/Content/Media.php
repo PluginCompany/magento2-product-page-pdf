@@ -9,6 +9,7 @@ namespace Plugincompany\ProductPdf\Block\Pdf\Content;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\ScopeInterface;
 use Plugincompany\ProductPdf\Block\Pdf\Content;
 
 class Media extends Content
@@ -189,8 +190,9 @@ class Media extends Content
             $product = $this->getProduct();
         }
 
-        if(!$product->getImage() || $product->getImage() == 'no_selection')
+        if(!$product->getImage() || $product->getImage() == 'no_selection'){
             return false;
+        }
 
         $url = $this->getFullProductImageUrl($product->getImage());
         return new DataObject(['url' => $url, 'file' => $product->getImage()]);
@@ -260,6 +262,19 @@ class Media extends Content
     public function getConfigFlag($field)
     {
         return $this->getGalleryConfigFlag($field);
+    }
+
+    public function getMainImageUrl()
+    {
+        if($this->getMainImage()){
+            return $this->getMainImage()->getUrl();
+        }
+        return $this->getPlaceHolderUrl();
+    }
+
+    private function getPlaceHolderUrl()
+    {
+        return $this->getViewFileUrl('Magento_Catalog::images/product/placeholder/image.jpg');
     }
 
 }
