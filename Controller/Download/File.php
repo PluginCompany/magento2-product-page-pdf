@@ -15,6 +15,7 @@ use Magento\Framework\Registry;
 use PluginCompany\ProductPdf\Adapter\PdfGenerator\Mpdf;
 use PluginCompany\ProductPdf\Adapter\PdfGenerator\PdfGeneratorInterface;
 use Psr\Log\LoggerInterface;
+use PluginCompany\ProductPdf\Controller\Download\File\CallExit;
 
 class File extends Action {
 
@@ -41,18 +42,24 @@ class File extends Action {
     private $product;
 
     private $pdfBlock;
+    /**
+     * @var CallExit
+     */
+    private $callExit;
 
     public function __construct(
         Context $context,
         ProductFactory $catalogProductFactory,
         Registry $registry,
         LoggerInterface $logger,
-        Mpdf $pdfGenerator
+        Mpdf $pdfGenerator,
+        CallExit $callExit
     ) {
         $this->catalogProductFactory = $catalogProductFactory;
         $this->registry = $registry;
         $this->logger = $logger;
         $this->pdfGenerator = $pdfGenerator;
+        $this->callExit = $callExit;
         parent::__construct(
             $context
         );
@@ -186,12 +193,10 @@ class File extends Action {
      * Call exit
      *
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function callExit()
     {
-        // @codingStandardsIgnoreLine
-        exit(0);
+        $this->callExit->doCallExit();
     }
 
 }

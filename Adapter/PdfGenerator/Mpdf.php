@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
 use Mpdf\Mpdf as MpdfLib;
+use PluginCompany\ProductPdf\Model\FontDirIO;
 use PluginCompany\ProductPdf\Model\FontReader;
 
 // Report all errors except E_NOTICE
@@ -37,12 +38,16 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
     private $block;
     /** @var FontReader */
     private $fontReader;
+    /** @var FontDirIO */
+    private $fontDirIO;
 
     public function __construct(
-        FontReader $fontReader
+        FontReader $fontReader,
+        FontDirIO $fontDirIO
     ) {
         $this->setData($this->defaults);
         $this->fontReader = $fontReader;
+        $this->fontDirIO = $fontDirIO;
         return $this;
     }
 
@@ -80,7 +85,7 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
 
     private function getGoogleFontDir()
     {
-        return $this->fontReader->getGoogleFontDir();
+        return $this->fontDirIO->getGoogleFontDir();
     }
 
     private function getFontData()
