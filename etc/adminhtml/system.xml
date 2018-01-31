@@ -20,6 +20,13 @@
                     <comment>Product page block in which the PDF download link is shown.</comment>
                     <source_model>PluginCompany\ProductPdf\Model\System\Config\Source\Blockposition</source_model>
                 </field>
+                <field id="link_custom_css_selector" sortOrder="210" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Custom CSS Selector</label>
+                    <comment>The custom CSS / jQuery selector to insert the PDF print link at</comment>
+                    <depends>
+                        <field id="link_placement_selector">custom_selector</field>
+                    </depends>
+                </field>
                 <field id="link_placement_method" sortOrder="250" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>PDF Link / Icon Insertion Method</label>
                     <comment>Method used to add the PDF download link to the selected product page block.</comment>

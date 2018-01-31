@@ -188,10 +188,28 @@ class Link extends Template {
         ];
     }
 
-    public function getLinkPlacementClass(){
+    public function getLinkPlacementClass()
+    {
+        $selector = $this->getLinkPlacementSelectorValue();
+        if($selector == 'custom_selector'){
+            return $this->getCustomSelectorClass();
+        }
+    }
+
+    private function getLinkPlacementSelectorValue()
+    {
         return $this->scopeConfig
             ->getValue(
                 'plugincompany_productpdf/frontend/link_placement_selector',
+                ScopeInterface::SCOPE_STORE
+            );
+    }
+
+    private function getCustomSelectorClass()
+    {
+        return $this->scopeConfig
+            ->getValue(
+                'plugincompany_productpdf/frontend/link_custom_css_selector',
                 ScopeInterface::SCOPE_STORE
             );
     }
