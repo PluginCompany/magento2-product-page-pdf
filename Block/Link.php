@@ -194,6 +194,7 @@ class Link extends Template {
         if($selector == 'custom_selector'){
             return $this->getCustomSelectorClass();
         }
+        return $selector;
     }
 
     private function getLinkPlacementSelectorValue()

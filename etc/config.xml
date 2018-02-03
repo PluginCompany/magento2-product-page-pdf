@@ -83,17 +83,18 @@
             </footer>
             <frontend>
                 <enable_extension>1</enable_extension>
-                <link_placement_selector>#product-addtocart-button</link_placement_selector>
+                <link_placement_selector>#product-addtocart-button, #bundle-slide</link_placement_selector>
                 <link_placement_method>insertAfter</link_placement_method>
-                <show_as>icon</show_as>
+                <show_as>icon_and_link</show_as>
                 <icon_css>
 width: 20px;
 display: inline;
 vertical-align: bottom;
 margin-top: 15px;
+margin-right:2px;
                 </icon_css>
                 <link_css>
-color: #999!important;
+color: #666!important;
 text-decoration: none!important;
 font-weight: 600;
 text-transform: uppercase;

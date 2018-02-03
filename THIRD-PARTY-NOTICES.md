@@ -7,7 +7,6 @@ The MIT license in `LICENSE` covers the code written by Plugin Company. This ext
 | `view/adminhtml/web/js/lib/sortable/` | Sortable (RubaXa) | 1.6.1 | MIT |
 | `view/adminhtml/web/js/lib/tinycolor.js` | TinyColor | 1.4.1 | MIT |
 | `view/frontend/web/css/bootstrap/` | Bootstrap (incl. Glyphicons Halflings) | 3.3.7 | MIT |
-| `view/base/googlefonts/` | Google Fonts (font files + OFL.txt/LICENSE.txt per family) | n/a | OFL-1.1 (most families); Apache-2.0 (Open Sans, Roboto, Roboto Slab) |
 
 ## Composer dependencies (not bundled)
 

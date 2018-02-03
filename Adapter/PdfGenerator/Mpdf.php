@@ -29,7 +29,7 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
         'margin_top' => 12,
         'margin_bottom' => 5,
         'margin_header' => 0,
-        'margin_footer' => 7
+        'margin_footer' => 7,
     ];
 
     /** @var  \Mpdf\Mpdf */

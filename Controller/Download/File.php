@@ -73,7 +73,7 @@ class File extends Action {
         try {
             return $this->runExecute();
         } catch (\Exception $e){
-            $this->logger->log(NULL, $e->getMessage());
+            $this->logger->log(500, $e->getMessage());
         }
     }
 
