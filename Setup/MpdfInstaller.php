@@ -35,6 +35,11 @@ class MpdfInstaller
                 "cd {$this->getRootDir()};
                  {$this->exec->getPhpExecutable()} ./vendor/bin/composer require --no-interaction mpdf/mpdf"
             );
+        $this->exec
+            ->execute(
+                "cd {$this->getRootDir()};
+                chmod -Rf 777 ./vendor/mpdf"
+            );
         return $this;
     }
 
