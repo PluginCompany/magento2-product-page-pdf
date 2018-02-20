@@ -159,9 +159,31 @@ class File extends Action {
 
     private function generatePdf()
     {
-        $this->addFooterToPdf();
-        $this->streamPdf();
-        $this->callExit();
+        try {
+            $this->addFooterToPdf();
+            $this->streamPdf();
+            $this->callExit();
+        }catch(\Exception $e) {
+            if(stristr($e->getMessage(), 'Temporary files directory')){
+                return $this->showTempFileWriteError();
+            }
+            throw $e;
+        }
+    }
+
+    private function showTempFileWriteError()
+    {
+        /** @var \Magento\Framework\App\Response\Http $response */
+        $response = $this->getResponse();
+        return $response
+            ->setContent(
+                $this->_view
+                    ->getLayout()
+                    ->createBlock('Magento\Framework\View\Element\Template')
+                    ->setTemplate('PluginCompany_ProductPdf::error/mpdf_temp_dir.phtml')
+                    ->toHtml()
+            )
+            ->sendResponse();
     }
 
     private function addFooterToPdf()
