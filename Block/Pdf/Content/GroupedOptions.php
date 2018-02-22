@@ -5,10 +5,10 @@
  * This file is part of Product Page PDF for Magento 2, released under the MIT License.
  * See the LICENSE file in the project root.
  */
-namespace Plugincompany\ProductPdf\Block\Pdf\Content;
+namespace PluginCompany\ProductPdf\Block\Pdf\Content;
 
 use Magento\Catalog\Model\Product;
-use Plugincompany\ProductPdf\Block\Pdf\Content;
+use PluginCompany\ProductPdf\Block\Pdf\Content;
 
 class GroupedOptions extends Content
 {

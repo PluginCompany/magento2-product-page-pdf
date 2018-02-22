@@ -40,13 +40,13 @@ class Pdf extends Template
     private $galleryReadHandler;
 
     public function __construct(
+        Context $context,
         FilterFactory $templateFilterFactory,
         DirectoryList $directoryList,
         CollectionFactory $collectionFactory,
         ImageCompare $imageCompare,
         Data $pricingHelper,
         ReadHandler $galleryReadHandler,
-        Context $context,
         $data = []
     ) {
         $this->templateFilterFactory = $templateFilterFactory; $this->directoryList = $directoryList;
