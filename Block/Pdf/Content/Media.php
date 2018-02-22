@@ -25,8 +25,12 @@ class Media extends Content
 
     public function getGalleryImagesHtml()
     {
+        $template = $this->getConfig('gallery_style');
+        if(!$this->getImageCount()){
+            $template = '1-col-grid';
+        }
         return $this->setTemplate(
-            'PluginCompany_ProductPdf::pdf/content/media/' . $this->getConfig('gallery_style') . '.phtml'
+            'PluginCompany_ProductPdf::pdf/content/media/' . $template . '.phtml'
         )->toHtml();
     }
 
