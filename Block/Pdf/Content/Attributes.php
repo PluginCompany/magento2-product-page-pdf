@@ -32,7 +32,9 @@ class Attributes extends Content
         foreach ($attributes as $attribute) {
             if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
                 $value = $attribute->getFrontend()->getValue($product);
-
+                if(!$this->canShowEmptyAttributes() && !$value){
+                    continue;
+                }
                 if (!$product->hasData($attribute->getAttributeCode())) {
                     $value = __('N/A');
                 } elseif ((string)$value == '') {
@@ -65,6 +67,11 @@ class Attributes extends Content
     private function canRender()
     {
         return (bool)count($this->getAdditionalData());
+    }
+
+    public function canShowEmptyAttributes()
+    {
+        return !$this->getGroupConfigFlag('additional_information/hide_empty_attributes');
     }
 }
 

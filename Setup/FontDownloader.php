@@ -28,6 +28,14 @@ class FontDownloader
         return $this;
     }
 
+    public function installIfNotAvailable()
+    {
+        if($this->fontDirIO->doesFontDirExist()){
+            return $this;
+        }
+        return $this->execute();
+    }
+
     public function execute()
     {
         $this

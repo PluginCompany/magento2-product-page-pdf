@@ -7,12 +7,27 @@
  */
 namespace PluginCompany\ProductPdf\Block\Adminhtml\Config;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use PluginCompany\ProductPdf\Setup\FontDownloader;
 
 class FontPicker
     extends Field
 {
+    /**
+     * @param Context $context
+     * @param FontDownloader $fontDownloader
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        FontDownloader $fontDownloader,
+        array $data = []
+    ) {
+        $fontDownloader->installIfNotAvailable();
+        parent::__construct($context, $data);
+    }
     /**
      * @var AbstractElement
      */

@@ -34,26 +34,15 @@ class FontDirIO
         return $this;
     }
 
-    public function getAdditionalFontsForMpdf()
-    {
-        $fonts = array();
-        foreach($this->readFontDir() as $fontDir){
-            $this->io->open(array('path' => $fontDir['id']));
-            $fontKey = $fontDir['text'];
-            $fonts[$fontKey] = array(
-                'R' => $fontKey . '/' . $this->getRegularFont(),
-                'B' => $fontKey . '/' . $this->getBoldFont(),
-                'I' => $fontKey . '/' . $this->getItalicFont(),
-                'BI' => $fontKey . '/' . $this->getBoldItalicFont()
-            );
-        }
-        return $fonts;
-    }
-
     public function readFontDir()
     {
         $this->io->open(array('path' => $this->getGoogleFontDir()));
         return $this->io->ls();
+    }
+
+    public function doesFontDirExist()
+    {
+        return is_dir($this->getGoogleFontDir());
     }
 
     public function getGoogleFontDir()

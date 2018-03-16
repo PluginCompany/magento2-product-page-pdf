@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div style="margin-top:30px" class="alert alert-danger">
-                <b>mPDF temp directory is not writable by the webserver user</b>
+                <b>mPDF temporary directory is not writable by the webserver user</b>
             </div>
         </div>
     </div>
@@ -31,6 +31,10 @@
             <h4>Using FTP software</h4>
             <p>Open your FTP software and navigate to the following directory on your server: <code>{magento_root}/vendor/mpdf/mpdf</code></p>
             <p>Right click the <code>tmp</code> folder and update permissions to write access for the web server user</p>
+        </div>
+        <div class="col-xs-12">
+            <h4>Clear the full page cache</h4>
+            <p>After changing the directory permissions, please don't forget to clear the Magento cache.</p>
         </div>
     </div>
 </div>

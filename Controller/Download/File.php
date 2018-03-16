@@ -14,6 +14,8 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Registry;
 use PluginCompany\ProductPdf\Adapter\PdfGenerator\Mpdf;
 use PluginCompany\ProductPdf\Adapter\PdfGenerator\PdfGeneratorInterface;
+use PluginCompany\ProductPdf\Model\FontDirIO;
+use PluginCompany\ProductPdf\Setup\FontDownloader;
 use Psr\Log\LoggerInterface;
 use PluginCompany\ProductPdf\Controller\Download\File\CallExit;
 
@@ -46,6 +48,10 @@ class File extends Action {
      * @var CallExit
      */
     private $callExit;
+    /**
+     * @var FontDownloader
+     */
+    private $fontDownloader;
 
     public function __construct(
         Context $context,
@@ -53,6 +59,7 @@ class File extends Action {
         Registry $registry,
         LoggerInterface $logger,
         Mpdf $pdfGenerator,
+        FontDownloader $fontDownloader,
         CallExit $callExit
     ) {
         $this->catalogProductFactory = $catalogProductFactory;
@@ -60,6 +67,7 @@ class File extends Action {
         $this->logger = $logger;
         $this->pdfGenerator = $pdfGenerator;
         $this->callExit = $callExit;
+        $this->fontDownloader = $fontDownloader;
         parent::__construct(
             $context
         );
@@ -79,12 +87,30 @@ class File extends Action {
 
     private function runExecute()
     {
-        $this->registerProduct();
+        if(!$this->isMpdfInstalled()){
+            return $this->showMpdfNotFoundError();
+        }
+        $this
+            ->downloadFontsIfNeeded()
+            ->registerProduct()
+        ;
         if($this->getRequest()->getParam('html')){
             return $this->printHtml();
         }
         return $this->generatePdf();
     }
+
+    private function isMpdfInstalled()
+    {
+        return class_exists('Mpdf\Mpdf');
+    }
+
+    private function downloadFontsIfNeeded()
+    {
+        $this->fontDownloader->installIfNotAvailable();
+        return $this;
+    }
+
     private function registerProduct()
     {
         $this->registry->register(
@@ -163,12 +189,24 @@ class File extends Action {
             $this->addFooterToPdf();
             $this->streamPdf();
             $this->callExit();
-        }catch(\Exception $e) {
-            if(stristr($e->getMessage(), 'Temporary files directory')){
-                return $this->showTempFileWriteError();
-            }
-            throw $e;
         }
+        catch(\Throwable $e) {
+            $this->handleError($e);
+        }
+        catch(\Exception $e) {
+            $this->handleError($e);
+        }
+    }
+
+    private function handleError($e)
+    {
+        if(stristr($e->getMessage(), 'Temporary files directory')){
+            return $this->showTempFileWriteError();
+        }
+        if(stristr($e->getMessage(), 'Permission denied')){
+            return $this->showTempFileWriteError();
+        }
+        throw $e;
     }
 
     private function showTempFileWriteError()
@@ -184,6 +222,18 @@ class File extends Action {
                     ->toHtml()
             )
             ->sendResponse();
+    }
+
+    private function showMpdfNotFoundError()
+    {
+        /** @var \Magento\Framework\App\Response\Http $response */
+        $response = $this->getResponse();
+        $response
+            ->setContent(
+                "<p>Please install the mPDF library on your server to view the PDF file. You can use the automatic installer in the admin area to finish the installation.</p>"
+            )
+            ->sendResponse()
+            ;
     }
 
     private function addFooterToPdf()

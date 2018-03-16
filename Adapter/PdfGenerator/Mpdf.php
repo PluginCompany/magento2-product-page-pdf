@@ -64,6 +64,9 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
 
     private function createMpdfWithSettings()
     {
+        if(!$this->fontDirIO->doesFontDirExist()){
+            throw new \Exception('Google font dir doesn\'t exist');
+        }
         $this->mpdf = new MpdfLib(
             $this->getData() + $this->getFontDirs() + $this->getFontData()
         );
