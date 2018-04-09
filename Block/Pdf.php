@@ -246,7 +246,7 @@ class Pdf extends Template
         return $this;
     }
 
-    protected function formatCurrency($value)
+    public function formatCurrency($value)
     {
         return $this->pricingHelper
             ->currency($value, true, false);

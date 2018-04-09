@@ -26,7 +26,7 @@ if (!empty($options)) {
                         <td></td>
                         <td class="price">
                             <p style="margin: 0 20px 0; ">
-                                <?php echo \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\Helper\AbstractHelper')->currency($option->getPrice()); ?>
+                                <?php echo $this->formatCurrency($option->getPrice()); ?>
                             </p>
                         </td>
                     </tr>
@@ -36,7 +36,7 @@ if (!empty($options)) {
                 foreach ($values as $value) {
                     $data = $value->getData();
                     $title = $data['title'];
-                    $price = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\Helper\AbstractHelper')->currency($data['price']);
+                    $price = $this->formatCurrency($data['price']);
                     ?>
                     <tr class="<?php echo $this->getRowClass($i); ?>">
                         <td class="custom-option-title" colspan="2">
