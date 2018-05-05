@@ -10,20 +10,8 @@ namespace PluginCompany\ProductPdf\Model\System\Config\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 
-class Attachment implements ArrayInterface
+class Attachment extends AbstractOption implements ArrayInterface
 {
-
-    public function toOptionArray()
-    {
-        $options = array();
-        foreach($this->toArray() as $k => $v){
-            $options[] = array(
-                'label' => $v,
-                'value' => $k
-            );
-        }
-        return $options;
-    }
 
     /**
      * Get options in "key-value" format

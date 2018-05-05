@@ -10,22 +10,8 @@ namespace PluginCompany\ProductPdf\Model\System\Config\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 
-class Linethickness implements ArrayInterface
+class Linethickness extends AbstractOption implements ArrayInterface
 {
-
-    public function toOptionArray()
-    {
-        $options = array();
-        foreach($this->toArray() as $label => $value)
-        {
-            $options[] = array(
-                'label' => $label,
-                'value' => $value
-            );
-        }
-        return $options;
-    }
-
     /**
      * Get options in "key-value" format
      *

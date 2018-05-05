@@ -9,6 +9,7 @@ namespace PluginCompany\ProductPdf\Block\Pdf\Content;
 
 use Magento\Catalog\Model\Product;
 use PluginCompany\ProductPdf\Block\Pdf\Content;
+use PluginCompany\ProductPdf\Model\System\Config\Source\ShowPrice;
 
 class GroupedOptions extends Content
 {
@@ -24,6 +25,22 @@ class GroupedOptions extends Content
     {
         $item->getResource()->load($item, $item->getEntityId());
         return $this->getFullProductImageUrl($item->getImage());
+    }
+
+    public function canShowPrice()
+    {
+        if($this->getShowPriceSetting() == ShowPrice::SHOW_PRICE) {
+            return true;
+        }
+        if($this->getShowPriceSetting() == ShowPrice::HIDE_PRICE) {
+            return false;
+        }
+        return parent::canShowPrice();
+    }
+
+    private function getShowPriceSetting()
+    {
+        return (int)$this->getGroupConfig('grouped_product/show_price');
     }
 
     public function getFormattedItemPrice($item)

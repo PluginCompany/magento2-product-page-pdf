@@ -8,6 +8,7 @@
 namespace PluginCompany\ProductPdf\Block\Pdf\Content;
 
 use PluginCompany\ProductPdf\Block\Pdf\Content;
+use PluginCompany\ProductPdf\Model\System\Config\Source\ShowPrice;
 
 class BundleOptions extends Content
 {
@@ -29,6 +30,22 @@ class BundleOptions extends Content
     public function getFullImageUrl($path)
     {
         return $this->getFullProductImageUrl($path);
+    }
+
+    public function canShowPrice()
+    {
+        if($this->getShowPriceSetting() == ShowPrice::SHOW_PRICE) {
+            return true;
+        }
+        if($this->getShowPriceSetting() == ShowPrice::HIDE_PRICE) {
+            return false;
+        }
+        return parent::canShowPrice();
+    }
+
+    private function getShowPriceSetting()
+    {
+        return (int)$this->getGroupConfig('bundle_product/show_price');
     }
 
     public function getFormattedItemPrice($item)

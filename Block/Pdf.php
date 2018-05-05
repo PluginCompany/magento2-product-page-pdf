@@ -13,6 +13,7 @@ use Magento\Framework\Data\CollectionFactory;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Widget\Model\Template\FilterFactory;
 use PluginCompany\ProductPdf\Helper\ImageCompare;
 
@@ -213,7 +214,7 @@ class Pdf extends Template
     public function getGroupConfig($config)
     {
         return $this->_scopeConfig->getValue(
-            'plugincompany_productpdf/' . $config, \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            'plugincompany_productpdf/' . $config, ScopeInterface::SCOPE_STORE,
             $this->_storeManager->getStore()->getId()
         );
     }
@@ -221,7 +222,7 @@ class Pdf extends Template
     public function getGroupConfigFlag($configFlag)
     {
         return $this->_scopeConfig->isSetFlag(
-            'plugincompany_productpdf/' . $configFlag, \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            'plugincompany_productpdf/' . $configFlag, ScopeInterface::SCOPE_STORE,
             $this->_storeManager->getStore()->getId()
         );
     }

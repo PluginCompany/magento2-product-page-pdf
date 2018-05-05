@@ -24,11 +24,13 @@ if (!empty($options)) {
                             <?php echo __($gtitle); ?>
                         </td>
                         <td></td>
-                        <td class="price">
-                            <p style="margin: 0 20px 0; ">
-                                <?php echo $this->formatCurrency($option->getPrice()); ?>
-                            </p>
-                        </td>
+                        <?php if($this->canShowPrice()) { ?>
+                            <td class="price">
+                                <p style="margin: 0 20px 0; ">
+                                    <?php echo $this->formatCurrency($option->getPrice()); ?>
+                                </p>
+                            </td>
+                        <?php } ?>
                     </tr>
                     <?php $i++; } ?>
 
@@ -43,7 +45,9 @@ if (!empty($options)) {
                             <?php echo __($gtitle); ?>
                         </td>
                         <td><?php echo __($title); ?></td>
-                        <td class="price"><p style="margin: 0 20px 0; "><?php echo $price; ?></p></td>
+                        <?php if($this->canShowPrice()) { ?>
+                            <td class="price"><p style="margin: 0 20px 0; "><?php echo $price; ?></p></td>
+                        <?php } ?>
                     </tr>
                     <?php
                     $gtitle = '';

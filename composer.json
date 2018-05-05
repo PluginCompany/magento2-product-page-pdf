@@ -6,7 +6,7 @@
         "mpdf/mpdf": "~7.0"
     },
     "type": "magento2-module",
-    "version": "100.2.2",
+    "version": "100.3.0",
     "license": "MIT",
     "homepage": "https://plugin.company/magento-extensions/product-page-pdf.html",
     "support": {

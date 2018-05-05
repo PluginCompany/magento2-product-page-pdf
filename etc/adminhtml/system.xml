@@ -443,6 +443,14 @@
                         <field id="show_bundle_product_options">1</field>
                     </depends>
                 </field>
+                <field id="show_price" sortOrder="120" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Item Price</label>
+                    <comment>Choose whether to show the child item prices or not.</comment>
+                    <source_model>PluginCompany\ProductPdf\Model\System\Config\Source\ShowPrice</source_model>
+                    <depends>
+                        <field id="show_bundle_product_options">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="grouped_product" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Grouped Product Settings</label>
@@ -458,6 +466,14 @@
                         <field id="show_grouped_product_options">1</field>
                     </depends>
                 </field>
+                <field id="show_price" sortOrder="120" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Item Price</label>
+                    <comment>Choose whether to show the child item prices or not.</comment>
+                    <source_model>PluginCompany\ProductPdf\Model\System\Config\Source\ShowPrice</source_model>
+                    <depends>
+                        <field id="show_grouped_product_options">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="custom_options" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom Options Settings</label>
@@ -469,6 +485,14 @@
                     <label>Show on New Page</label>
                     <comment>Show this section on a new page instead of adding it to an existing page.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="show_custom_options">1</field>
+                    </depends>
+                </field>
+                <field id="show_price" sortOrder="120" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Item Price</label>
+                    <comment>Choose whether to show the custom option prices or not.</comment>
+                    <source_model>PluginCompany\ProductPdf\Model\System\Config\Source\ShowPrice</source_model>
                     <depends>
                         <field id="show_custom_options">1</field>
                     </depends>

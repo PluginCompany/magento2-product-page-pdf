@@ -30,26 +30,33 @@ class Attributes extends Content
         $product = $this->getProduct();
         $attributes = $product->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
-                $value = $attribute->getFrontend()->getValue($product);
-                if(!$this->canShowEmptyAttributes() && !$value){
-                    continue;
-                }
-                if (!$product->hasData($attribute->getAttributeCode())) {
-                    $value = __('N/A');
-                } elseif ((string)$value == '') {
-                    $value = __('No');
-                } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
-                    $value = $this->_modelStoreManagerInterface->getStore()->convertPrice($value, true);
-                }
+            if(!$attribute->getIsVisibleOnFront()){
+                continue;
+            }
+            if(in_array($attribute->getAttributeCode(), $excludeAttr)){
+                continue;
+            }
+            $value = $attribute->getFrontend()->getValue($product);
+            if(is_string($value)) {
+                $value = trim($value);
+            }
+            if(!$this->canShowEmptyAttributes() && !$value){
+                continue;
+            }
+            if (!$product->hasData($attribute->getAttributeCode())) {
+                $value = __('N/A');
+            } elseif ((string)$value == '') {
+                $value = __('No');
+            } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
+                $value = $this->_modelStoreManagerInterface->getStore()->convertPrice($value, true);
+            }
 
-                if (is_string($value) && strlen($value)) {
-                    $data[$attribute->getAttributeCode()] = [
-                        'label' => $attribute->getStoreLabel(),
-                        'value' => $value,
-                        'code'  => $attribute->getAttributeCode()
-                    ];
-                }
+            if (is_string($value) && strlen($value)) {
+                $data[$attribute->getAttributeCode()] = [
+                    'label' => $attribute->getStoreLabel(),
+                    'value' => $value,
+                    'code'  => $attribute->getAttributeCode()
+                ];
             }
         }
         $this->additionalData = $data;

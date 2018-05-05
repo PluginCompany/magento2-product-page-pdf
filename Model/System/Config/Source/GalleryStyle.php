@@ -9,22 +9,8 @@ namespace PluginCompany\ProductPdf\Model\System\Config\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 
-class GalleryStyle implements ArrayInterface
+class GalleryStyle extends AbstractOption implements ArrayInterface
 {
-
-    public function toOptionArray()
-    {
-        $options = array();
-        foreach($this->toArray() as $value => $label)
-        {
-            $options[] = array(
-                'label' => $label,
-                'value' => $value
-            );
-        }
-        return $options;
-    }
-
     /**
      * Get options in "key-value" format
      *
