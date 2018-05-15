@@ -48,7 +48,7 @@ class Attributes extends Content
             } elseif ((string)$value == '') {
                 $value = __('No');
             } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
-                $value = $this->_modelStoreManagerInterface->getStore()->convertPrice($value, true);
+                $value = $this->formatCurrency($value);
             }
 
             if (is_string($value) && strlen($value)) {
