@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PluginCompany\ProductPdf\Model\Product\PdfUrl;
 
 class Link extends Template {
 
@@ -21,29 +22,34 @@ class Link extends Template {
      * @var StoreManagerInterface
      */
     protected $storeManager;
-
     /**
      * @var Registry
      */
     protected $registry;
-
     /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
-
-    /** @var UrlInterface */
+    /**
+     * @var UrlInterface
+     */
     protected $frameworkUrl;
+    /**
+     * @var PdfUrl
+     */
+    private $pdfUrlBuilder;
 
     public function __construct(
         Context $context,
         Registry $registry,
+        PdfUrl $pdfUrlBuilder,
         array $data = []
     ){
         $this->storeManager = $context->getStoreManager();
         $this->registry = $registry;
         $this->scopeConfig = $context->getScopeConfig();
         $this->frameworkUrl = $context->getUrlBuilder();
+        $this->pdfUrlBuilder = $pdfUrlBuilder;
         parent::__construct(
             $context,
             $data
@@ -53,28 +59,10 @@ class Link extends Template {
 
     public function getPdfUrl()
     {
-        return $this->getUrl('productpdf/download/file',
-            [
-                'id' => $this->getProductId(),
-                'name' => $this->getFileName(),
-                '_secure' => $this->isSecure()
-            ]
-        );
-    }
-
-    private function getFileName()
-    {
-        return urlencode(
-            str_replace(
-                array(' ','/'),
-                array('_', ''),
-                $this->getProduct()->getName() . '.pdf')
-        );
-    }
-
-    private function getProductId()
-    {
-        return $this->getProduct()->getId();
+        return $this->pdfUrlBuilder
+            ->setProduct($this->getProduct())
+            ->setStoreId($this->getCurrentStoreId())
+            ->getPdfUrl();
     }
 
     private function getProduct()
@@ -82,9 +70,9 @@ class Link extends Template {
         return $this->registry->registry('product');
     }
 
-    private function isSecure()
+    private function getCurrentStoreId()
     {
-        return (bool)$this->getRequest()->isSecure();
+        return $this->storeManager->getStore()->getId();
     }
 
     public function isEnabled(){

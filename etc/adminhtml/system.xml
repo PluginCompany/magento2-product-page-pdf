@@ -11,7 +11,7 @@
             <group id="frontend" translate="label" sortOrder="00" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Front-end Settings</label>
                 <field id="enable_extension" sortOrder="100" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable Extension</label>
+                    <label>Enable Extension on Front-end</label>
                     <comment>Add PDF download functionality to all product pages.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
