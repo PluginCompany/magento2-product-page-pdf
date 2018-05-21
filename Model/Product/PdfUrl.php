@@ -10,7 +10,6 @@ namespace PluginCompany\ProductPdf\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Url;
-use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -30,18 +29,25 @@ class PdfUrl
      * @var RequestInterface
      */
     private $request;
+    /**
+     * @var Url
+     */
+    private $urlBuilder;
 
     /**
      * PdfUrl constructor.
      * @param StoreManagerInterface $storeManager
      * @param RequestInterface $request
+     * @param Url $urlBuilder
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        RequestInterface $request
+        RequestInterface $request,
+        Url $urlBuilder
     ) {
         $this->storeManager = $storeManager;
         $this->request = $request;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -80,13 +86,13 @@ class PdfUrl
 
     private function getPdfUrlForCurrentScope()
     {
-        return $this->getFrontendStore()
+        $this->urlBuilder->setScope($this->getFrontendStore());
+        return $this->urlBuilder
             ->getUrl('productpdf/download/file',
                 [
                     'id' => $this->getProductId(),
                     'name' => $this->getFileName(),
                     '_secure' => $this->isSecure(),
-                    '_scope_to_url' => true,
                     '_nosid' => true
                 ]
             );
@@ -98,7 +104,7 @@ class PdfUrl
             str_replace(
                 array(' ','/'),
                 array('_', ''),
-                $this->getProduct()->getName() . '.pdf')
+                trim($this->getProduct()->getName()) . '.pdf')
         );
     }
 
@@ -129,6 +135,7 @@ class PdfUrl
         if($this->getCurrentStoreId()) {
             return $this->getCurrentStoreId();
         }
+        $this->getDefaultStoreId();
         return $this->getDefaultStoreId();
     }
 
