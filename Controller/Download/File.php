@@ -17,7 +17,6 @@ use PluginCompany\ProductPdf\Adapter\PdfGenerator\PdfGeneratorInterface;
 use PluginCompany\ProductPdf\Model\FontDirIO;
 use PluginCompany\ProductPdf\Setup\FontDownloader;
 use Psr\Log\LoggerInterface;
-use PluginCompany\ProductPdf\Controller\Download\File\CallExit;
 
 class File extends Action {
 
@@ -45,13 +44,11 @@ class File extends Action {
 
     private $pdfBlock;
     /**
-     * @var CallExit
-     */
-    private $callExit;
-    /**
      * @var FontDownloader
      */
     private $fontDownloader;
+
+    private $renderedPdfContent;
 
     public function __construct(
         Context $context,
@@ -59,14 +56,12 @@ class File extends Action {
         Registry $registry,
         LoggerInterface $logger,
         Mpdf $pdfGenerator,
-        FontDownloader $fontDownloader,
-        CallExit $callExit
+        FontDownloader $fontDownloader
     ) {
         $this->catalogProductFactory = $catalogProductFactory;
         $this->registry = $registry;
         $this->logger = $logger;
         $this->pdfGenerator = $pdfGenerator;
-        $this->callExit = $callExit;
         $this->fontDownloader = $fontDownloader;
         parent::__construct(
             $context
@@ -188,7 +183,6 @@ class File extends Action {
         try {
             $this->addFooterToPdf();
             $this->streamPdf();
-            $this->callExit();
         }
         catch(\Throwable $e) {
             $this->handleError($e);
@@ -248,27 +242,48 @@ class File extends Action {
         return $this;
     }
 
-
     private function streamPdf()
     {
-        $this->pdfGenerator
-            ->setFileName($this->getFileName())
-            ->generate($this->getPdfBlock());
+        $this->sendPdfHeaders();
+        echo $this->getRenderedPdfContent();
+        flush();
     }
+
+    private function sendPdfHeaders()
+    {
+        $this->_response->setHttpResponseCode(200)
+            ->setHeader('Pragma', 'public', true)
+            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->setHeader('Content-type', 'application/pdf', true)
+            ->setHeader('Content-Length', strlen($this->getRenderedPdfContent()), true)
+            ->setHeader('Content-Disposition', 'inline; filename="' . $this->getFileName() . '"', true)
+            ->setHeader('Last-Modified', date('r'), true);
+        $this->_response->sendHeaders();
+        return $this;
+    }
+
+    private function getRenderedPdfContent()
+    {
+        if(!$this->renderedPdfContent) {
+            $this->initRenderedPdfContent();
+        }
+        return $this->renderedPdfContent;
+    }
+
+    private function initRenderedPdfContent()
+    {
+        $this->renderedPdfContent =
+            $this->pdfGenerator
+                ->setFileName($this->getFileName())
+                ->generate($this->getPdfBlock())
+        ;
+        return $this;
+    }
+
 
     private function getFileName()
     {
         return urldecode(str_replace(' ', '_', $this->getProduct()->getName())).'.pdf';
-    }
-
-    /**
-     * Call exit
-     *
-     * @return void
-     */
-    protected function callExit()
-    {
-        $this->callExit->doCallExit();
     }
 
 }
