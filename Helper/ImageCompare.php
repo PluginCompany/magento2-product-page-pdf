@@ -37,8 +37,6 @@ class ImageCompare
         }
         $i1 = $this->resizeImage($pathOne);
         $i2 = $this->resizeImage($pathTwo);
-        imagefilter($i1, IMG_FILTER_GRAYSCALE);
-        imagefilter($i2, IMG_FILTER_GRAYSCALE);
         $colorMeanOne = $this->colorMeanValue($i1);
         $colorMeanTwo = $this->colorMeanValue($i2);
         $hammeringDistance = 0;

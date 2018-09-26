@@ -352,6 +352,11 @@
                         <field id="show_images">1</field>
                     </depends>
                 </field>
+                <field id="gallery_image_count" translate="label" sortOrder="145" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Gallery Image Count</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                    <comment>The maximum amount of additional gallery images to show in the PDF.</comment>
+                </field>
                 <field id="add_pagebreak" translate="label" sortOrder="150" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show on New Page</label>
                     <comment>Show this section on a new page instead of adding it to an existing page.</comment>

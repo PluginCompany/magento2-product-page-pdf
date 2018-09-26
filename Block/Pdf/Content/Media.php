@@ -57,6 +57,10 @@ class Media extends Content
 
     private function initMediaGalleryImages()
     {
+        if(!$this->getMaxAllowedGalleryImages()) {
+            $this->mediaGalleryImages = $this->getDataCollectionFactory()->create();
+            return $this;
+        }
         $images =  $this->getProduct()->getMediaGalleryImages();
         $mediaGallery = $this->getDataCollectionFactory()->create();
         foreach($images as $image){
@@ -72,7 +76,13 @@ class Media extends Content
         if($this->getConfig('add_child_images')){
             $this->addConfigurableChildImages();
         }
+        $this->mediaGalleryImages = new \LimitIterator($this->mediaGalleryImages->getIterator(),0, $this->getMaxAllowedGalleryImages());
         return $this;
+    }
+
+    private function getMaxAllowedGalleryImages()
+    {
+        return $this->getConfig('gallery_image_count');
     }
 
     private function isMainProductImage($imagePath)
@@ -204,7 +214,11 @@ class Media extends Content
 
     public function getImageCount()
     {
-        return $this->getMediaGalleryImages()->count();
+        $count = $this->getMediaGalleryImages()->count();
+        if($count > $this->getMaxAllowedGalleryImages()) {
+            return $this->getMaxAllowedGalleryImages();
+        }
+        return $count;
     }
 
     public function getMediaGalleryImagesSelection($start, $end)

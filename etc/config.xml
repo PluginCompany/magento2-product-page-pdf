@@ -59,6 +59,7 @@
                 <gallery_border_color>f7f7f7</gallery_border_color>
                 <add_gallery_border>1</add_gallery_border>
                 <add_child_images>1</add_child_images>
+                <gallery_image_count>10</gallery_image_count>
                 <filter_duplicate_images>1</filter_duplicate_images>
             </gallery>
             <configurable_product>

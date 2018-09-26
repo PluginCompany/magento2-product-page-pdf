@@ -39,6 +39,7 @@ class FontPicker
      */
     protected function _getElementHtml(AbstractElement $element)
     {
+
         $this->element = $element;
         $element->setType('hidden');
         return $this->generateHtml();
