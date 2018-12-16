@@ -283,7 +283,7 @@ class File extends Action {
 
     private function getFileName()
     {
-        return urldecode(str_replace(' ', '_', $this->getProduct()->getName())).'.pdf';
+        return urldecode(str_replace(['____', '___', '__'], '_', preg_replace('/[^\da-z]/i', '_', $this->getProduct()->getName()))).'.pdf';
     }
 
 }
