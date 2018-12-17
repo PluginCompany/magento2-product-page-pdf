@@ -17,6 +17,7 @@ class Exec
             'php7-cli',
             'php7.0-cli',
             'php7.1-cli',
+            'php7.2-cli',
             'php'
         );
 
@@ -60,11 +61,15 @@ class Exec
             throw new \Exception("Exec is disabled. Please enable exec or shell_exec in php.ini.");
         }
         if($this->getExecMethodName() == 'exec'){
-            return @exec($command . $background);
+//            $this->logDebug('exec: ' . $command.$background);
+            @exec($command . $background);
+            return;
         }
         if($this->getExecMethodName() == 'shell_exec'){
+//            $this->logDebug('shell_exec: ' . $command.$background);
             return @shell_exec($command . $background);
         }
+//        $this->logDebug('NO EXEC');
         return $this;
     }
 
@@ -75,6 +80,12 @@ class Exec
 
     public function getPhpExecutable()
     {
+        if(!empty(PHP_BINARY)) {
+            $executable = preg_replace('/-cgi$/', '', PHP_BINARY);
+            if(file_exists($executable)) {
+                return $executable;
+            }
+        }
         foreach($this->phpExecutableList as $executable) {
             if($this->getExecutable($executable)){
                 return $this->getExecutable($executable);
@@ -94,5 +105,11 @@ class Exec
         }
         return false;
     }
+
+//    private function logDebug($message)
+//    {
+//        \Magento\Framework\App\ObjectManager::getInstance()
+//            ->get(\Psr\Log\LoggerInterface::class)->critical($message);
+//    }
 
 }

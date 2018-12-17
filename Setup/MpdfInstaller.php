@@ -29,11 +29,11 @@ class MpdfInstaller
 
     public function runInstall()
     {
-        putenv('COMPOSER_HOME=' . $this->getRootDir() . '/vendor/bin/composer');
+        putenv('COMPOSER_HOME=' . $this->getRootDir() . '/var/composer_home');
         $this->exec
             ->execute(
                 "cd {$this->getRootDir()};
-                 {$this->exec->getPhpExecutable()} ./vendor/bin/composer require --no-interaction mpdf/mpdf"
+                 {$this->exec->getPhpExecutable()} ./vendor/composer/composer/bin/composer require --no-interaction mpdf/mpdf"
             );
         $this->exec
             ->execute(
