@@ -14,7 +14,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Registry;
 use PluginCompany\ProductPdf\Adapter\PdfGenerator\Mpdf;
 use PluginCompany\ProductPdf\Adapter\PdfGenerator\PdfGeneratorInterface;
-use PluginCompany\ProductPdf\Model\FontDirIO;
 use PluginCompany\ProductPdf\Setup\FontDownloader;
 use Psr\Log\LoggerInterface;
 
@@ -245,20 +244,23 @@ class File extends Action {
     private function streamPdf()
     {
         $this->sendPdfHeaders();
-        echo $this->getRenderedPdfContent();
-        flush();
+        /** @var \Magento\Framework\App\Response\Http $response */
+        $response = $this->getResponse();
+        $response
+            ->setContent($this->getRenderedPdfContent())
+        ;
+        return $response->sendResponse();
     }
 
     private function sendPdfHeaders()
     {
-        $this->_response->setHttpResponseCode(200)
+        $this->getResponse()->setHttpResponseCode(200)
             ->setHeader('Pragma', 'public', true)
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
             ->setHeader('Content-type', 'application/pdf', true)
-            ->setHeader('Content-Length', strlen($this->getRenderedPdfContent()), true)
             ->setHeader('Content-Disposition', 'inline; filename="' . $this->getFileName() . '"', true)
             ->setHeader('Last-Modified', date('r'), true);
-        $this->_response->sendHeaders();
+        $this->getResponse()->sendHeaders();
         return $this;
     }
 

@@ -7,6 +7,7 @@
  */
 namespace PluginCompany\ProductPdf\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\FileFactory;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Module\Dir\Reader;
@@ -21,17 +22,22 @@ class FontDirIO
 
     /** @var Reader */
     private $moduleDirReader;
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
 
     public function __construct(
         Context $context,
         FileFactory $ioFileFactory,
-        Reader $moduleDirReader
+        Reader $moduleDirReader,
+        DirectoryList $directoryList
     )
     {
         $this->ioFileFactory = $ioFileFactory;
         $this->io = $this->ioFileFactory->create();
         $this->moduleDirReader = $moduleDirReader;
-        return $this;
+        $this->directoryList = $directoryList;
     }
 
     public function readFontDir()
@@ -47,9 +53,35 @@ class FontDirIO
 
     public function getGoogleFontDir()
     {
-        return $this->moduleDirReader->getModuleDir(null, 'PluginCompany_ProductPdf')
-            . '/view/base/googlefonts/';
+        return $this->getProductPdfMediaDir() . '/googlefonts';
     }
+
+
+    public function getProductPdfMediaDir()
+    {
+        $this->createProductPdfMediaDirIfNotExists();
+        return $this->getProductPdfMediaDirPath();
+    }
+
+    private function createProductPdfMediaDirIfNotExists()
+    {
+        if(!is_dir($this->getProductPdfMediaDirPath())) {
+            mkdir($this->getProductPdfMediaDirPath(), 0777, true);
+        }
+        return $this;
+    }
+
+    private function getProductPdfMediaDirPath()
+    {
+        return $this->getMediaDir() . '/plugincompany/productpdf/';
+    }
+
+
+    private function getMediaDir()
+    {
+        return $this->directoryList->getPath('media');
+    }
+
 
     /**
      * @return \Magento\Framework\Filesystem\Io\File

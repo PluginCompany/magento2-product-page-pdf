@@ -75,6 +75,11 @@
                     <label>Default Font Family</label>
                     <frontend_model>PluginCompany\ProductPdf\Block\Adminhtml\Config\FontPicker</frontend_model>
                 </field>
+                <field id="use_resource_path" sortOrder="400" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Load Assets Directly</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When enabled resources like CSS and images will be loaded through the filesystem instead of using HTTP requests. Enable this when you encounter image loading issues when running Magento behind a reverse proxy or in a docker container.</comment>
+                </field>
             </group>
             <group id="header" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>PDF Header Settings</label>

@@ -293,5 +293,41 @@ class Pdf extends Template
         return $this->galleryReadHandler;
     }
 
+    protected function _afterToHtml($html)
+    {
+        if(!$this->getGroupConfigFlag('general/use_resource_path')) {
+            return parent::_afterToHtml($html);
+        }
+        if($this->getRequest()->getParam('html')) {
+            return parent::_afterToHtml($html);
+        }
+        $html = str_replace(
+            [$this->getStaticUrl(), $this->getMediaUrl()],
+            [$this->getStaticPath(), $this->getMediaPath()],
+            $html
+        );
+        return parent::_afterToHtml($html);
+    }
+
+    private function getMediaUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl('media');
+    }
+
+    private function getMediaPath()
+    {
+        return $this->directoryList->getPath('media') . '/';
+    }
+
+    private function getStaticUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl('static');
+    }
+
+    private function getStaticPath()
+    {
+        return $this->directoryList->getPath('static') . '/';
+    }
+
 
 }

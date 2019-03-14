@@ -35,7 +35,7 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        $this->fontDownloader->execute();
+        $this->fontDownloader->installIfNotAvailable();
         $setup->endSetup();
     }
 }

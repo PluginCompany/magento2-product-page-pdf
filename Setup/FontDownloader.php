@@ -78,15 +78,14 @@ class FontDownloader
     private function getFontPackagePath($tarOnly = false)
     {
         if($tarOnly){
-            return $this->getViewBaseDir() . 'fonts.tar';
+            return $this->getProductPdfMediaDir() . 'fonts.tar';
         }
-        return $this->getViewBaseDir() . 'fonts.tar.gz';
+        return $this->getProductPdfMediaDir() . 'fonts.tar.gz';
     }
 
-    private function getViewBaseDir()
+    private function getProductPdfMediaDir()
     {
-        return $this->fontDirIO->getModuleDirReader()->getModuleDir(null, 'PluginCompany_ProductPdf')
-            . '/view/base/';
+        return $this->fontDirIO->getProductPdfMediaDir();
     }
 
     private function getFontDir()
@@ -96,17 +95,21 @@ class FontDownloader
 
     private function getExtractedPackageDir()
     {
-        return $this->getViewBaseDir() . 'product-pdf-fonts-mirror-1.0.1';
+        return $this->getProductPdfMediaDir() . '/product-pdf-fonts-mirror-1.0.1';
     }
 
     private function extractPackage()
     {
         if(class_exists('\PharData')){
-            $p = new \PharData($this->getFontPackagePath());
-            $p->extractTo($this->getViewBaseDir());
-        }else{
-            exec("cd {$this->getViewBaseDir()}; tar -zxf {$this->getFontPackagePath()}");
+            try{
+                $p = new \PharData($this->getFontPackagePath());
+                $p->extractTo($this->getProductPdfMediaDir());
+                return $this;
+            }catch(\Exception $e) {
+                //will fall back to exec method below in case of exception
+            }
         }
+        exec("cd {$this->getProductPdfMediaDir()}; tar -zxf {$this->getFontPackagePath()}");
         return $this;
     }
 
@@ -114,7 +117,7 @@ class FontDownloader
     {
         @rename(
             $this->getExtractedPackageDir() . '/googlefonts',
-            $this->getViewBaseDir() . 'googlefonts'
+            $this->fontDirIO->getGoogleFontDir()
         );
         return $this;
     }

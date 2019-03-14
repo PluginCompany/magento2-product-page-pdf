@@ -42,8 +42,8 @@ class ImageCompare
         $hammeringDistance = 0;
         for ($x = 0; $x < 64; $x++) {
             if (
-                $colorMeanOne[1][$x] * 0.8 > $colorMeanTwo[1][$x]
-                || $colorMeanOne[1][$x] * 1.2 < $colorMeanTwo[1][$x]
+                $colorMeanOne[1][$x] > $colorMeanTwo[1][$x]
+                || $colorMeanOne[1][$x] < $colorMeanTwo[1][$x]
             ) {
                 $hammeringDistance++;
             }
