@@ -7,6 +7,7 @@
  */
 namespace PluginCompany\ProductPdf\Adapter\PdfGenerator;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\AbstractBlock;
 use Mpdf\Config\ConfigVariables;
@@ -40,15 +41,20 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
     private $fontReader;
     /** @var FontDirIO */
     private $fontDirIO;
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
 
     public function __construct(
         FontReader $fontReader,
-        FontDirIO $fontDirIO
+        FontDirIO $fontDirIO,
+        DirectoryList $directoryList
     ) {
         $this->setData($this->defaults);
         $this->fontReader = $fontReader;
         $this->fontDirIO = $fontDirIO;
-        return $this;
+        $this->directoryList = $directoryList;
     }
 
     public function generate(AbstractBlock $block)
@@ -68,7 +74,10 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
             throw new \Exception('Google font dir doesn\'t exist');
         }
         $this->mpdf = new MpdfLib(
-            $this->getData() + $this->getFontDirs() + $this->getFontData()
+            $this->getData()
+            + $this->getFontDirs()
+            + $this->getFontData()
+            + $this->getTempDirConfig()
         );
         $this->mpdf->useSubstitutions = true;
         $this->mpdf->use_kwt = true;
@@ -105,6 +114,13 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
     private function getGoogleFontData()
     {
         return $this->fontReader->getAdditionalFontsForMpdf();
+    }
+
+    private function getTempDirConfig()
+    {
+        return [
+            'tempDir' => $this->directoryList->getPath('tmp') . '/mpdf'
+        ];
     }
 
     private function addFooter()
