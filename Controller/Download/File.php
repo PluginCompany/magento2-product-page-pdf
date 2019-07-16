@@ -254,7 +254,8 @@ class File extends Action {
 
     private function sendPdfHeaders()
     {
-        $this->getResponse()->setHttpResponseCode(200)
+        $this->getResponse()
+            ->setHttpResponseCode(200)
             ->setHeader('Pragma', 'public', true)
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
             ->setHeader('Content-type', 'application/pdf', true)

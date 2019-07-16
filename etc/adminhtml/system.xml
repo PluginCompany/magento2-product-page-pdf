@@ -47,6 +47,7 @@
                 <field id="icon_css" sortOrder="500" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Custom Icon CSS</label>
                     <comment>Custom CSS for PDF download icon.</comment>
+                    <validate>pc-css</validate>
                 </field>
                 <field id="link_text" sortOrder="600" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Link Title</label>
@@ -55,6 +56,7 @@
                 <field id="link_css" sortOrder="700" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Custom Link CSS</label>
                     <comment>Custom CSS for PDF download text link.</comment>
+                    <validate>pc-css</validate>
                 </field>
                 <field id="link_classes" sortOrder="800" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Custom CSS Classes</label>
@@ -79,6 +81,11 @@
                     <label>Load Assets Directly</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>When enabled resources like CSS and images will be loaded through the filesystem instead of using HTTP requests. Enable this when you encounter image loading issues when running Magento behind a reverse proxy or in a docker container.</comment>
+                </field>
+                <field id="custom_css" sortOrder="500" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Custom CSS</label>
+                    <comment>Custom CSS for the PDF file. To view the PDF output as html, add ?html=1 to the PDF URL.</comment>
+                    <validate>pc-css</validate>
                 </field>
             </group>
             <group id="header" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">

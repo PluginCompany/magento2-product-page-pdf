@@ -6,4 +6,10 @@
         <css src="PluginCompany_ProductPdf::js/lib/sortable/sortable.css"/>
         <css src="jquery/colorpicker/css/colorpicker.css"/>
     </head>
+    <body>
+        <block class="Magento\Framework\View\Element\Template" name="head.additional" as="head.additional" template="PluginCompany_ProductPdf::container.phtml"/>
+        <referenceBlock name="head.additional">
+            <block class="PluginCompany\ProductPdf\Block\Adminhtml\Config\CodeFlaskCss" name="pc.codemirror.css" />
+        </referenceBlock>
+    </body>
 </page>
