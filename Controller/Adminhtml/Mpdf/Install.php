@@ -3,6 +3,7 @@
 namespace PluginCompany\ProductPdf\Controller\Adminhtml\Mpdf;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\View\Result\PageFactory;
 use PluginCompany\ProductPdf\Controller\Adminhtml\Mpdf;
 use PluginCompany\ProductPdf\Setup\MpdfInstaller;
@@ -32,15 +33,28 @@ class Install extends Mpdf
     public function execute()
     {
         if($this->isMpdfInstalled()){
-            return $this->_redirect('*/*/index');
+            return $this->sendSuccessResponse();
         }
         return $this->runInstall();
     }
 
+    private function sendSuccessResponse()
+    {
+        /** @var Http $response */
+        $response = $this->getResponse();
+        return $this->getResponse()->setBody('success');
+    }
+
     private function runInstall()
     {
-        $this->installMPDF();
-        return $this->_redirect('*/*/index', ['tried_automatic_install' => true]);
+        try{
+            $this->installMPDF();
+        }
+        catch(\Exception $e) {}
+        catch(\Throwable $e) {};
+
+//        return $this->_redirect('*/*/index', ['tried_automatic_install' => true]);
+        return $this->sendSuccessResponse();
     }
 
     private function installMPDF()

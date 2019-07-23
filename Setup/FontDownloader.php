@@ -7,16 +7,15 @@
  */
 namespace PluginCompany\ProductPdf\Setup;
 
+use Magento\Framework\Filesystem\Io\File;
 use PluginCompany\ProductPdf\Model\FontDirIO;
 
 class FontDownloader
 {
+    const FONT_PACKAGE_URL = 'https://codeload.github.com/PluginCompany/product-pdf-fonts-mirror/zip/1.0.1';
 
-    const FONT_PACKAGE_URL = 'https://codeload.github.com/PluginCompany/product-pdf-fonts-mirror/tar.gz/1.0.1';
-
-    /** @var \Magento\Framework\Filesystem\Io\File  */
+    /** @var File  */
     private $io;
-
     /** @var FontDirIO  */
     private $fontDirIO;
 
@@ -25,7 +24,6 @@ class FontDownloader
     ) {
         $this->fontDirIO = $fontDirIO;
         $this->io = $this->io = $fontDirIO->getIo();
-        return $this;
     }
 
     public function installIfNotAvailable()
@@ -75,12 +73,9 @@ class FontDownloader
         return $this;
     }
 
-    private function getFontPackagePath($tarOnly = false)
+    private function getFontPackagePath()
     {
-        if($tarOnly){
-            return $this->getProductPdfMediaDir() . 'fonts.tar';
-        }
-        return $this->getProductPdfMediaDir() . 'fonts.tar.gz';
+        return $this->getProductPdfMediaDir() . 'fonts.zip';
     }
 
     private function getProductPdfMediaDir()
@@ -100,22 +95,16 @@ class FontDownloader
 
     private function extractPackage()
     {
-        if(class_exists('\PharData')){
-            try{
-                $p = new \PharData($this->getFontPackagePath());
-                $p->extractTo($this->getProductPdfMediaDir());
-                return $this;
-            }catch(\Exception $e) {
-                //will fall back to exec method below in case of exception
-            }
-        }
-        exec("cd {$this->getProductPdfMediaDir()}; tar -zxf {$this->getFontPackagePath()}");
+        $zip = new \ZipArchive();
+        $zip->open($this->getFontPackagePath());
+        $zip->extractTo($this->getProductPdfMediaDir());
+        $zip->close();
         return $this;
     }
 
     private function renameFolder()
     {
-        @rename(
+        $this->io->mv(
             $this->getExtractedPackageDir() . '/googlefonts',
             $this->fontDirIO->getGoogleFontDir()
         );

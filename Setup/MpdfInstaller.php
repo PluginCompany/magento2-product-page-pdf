@@ -7,45 +7,26 @@
  */
 namespace PluginCompany\ProductPdf\Setup;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use PluginCompany\ProductPdf\System\Exec;
+use PluginCompany\ProductPdf\Setup\Composer\ComposerRequire;
 
 class MpdfInstaller
 {
-    /** @var Exec */
-    private $exec;
-
-    /** @var DirectoryList */
-    private $directoryList;
+    /**
+     * @var ComposerRequire
+     */
+    private $composerRequire;
 
     public function __construct(
-        Exec $exec,
-        DirectoryList $directoryList
+        ComposerRequire $composerRequire
     ) {
-        $this->exec = $exec;
-        $this->directoryList = $directoryList;
-        return $this;
+        $this->composerRequire = $composerRequire;
     }
 
     public function runInstall()
     {
-        putenv('COMPOSER_HOME=' . $this->getRootDir() . '/var/composer_home');
-        $this->exec
-            ->execute(
-                "cd {$this->getRootDir()};
-                 {$this->exec->getPhpExecutable()} ./vendor/composer/composer/bin/composer require --no-interaction mpdf/mpdf"
-            );
-        $this->exec
-            ->execute(
-                "cd {$this->getRootDir()};
-                chmod -Rf 777 ./vendor/mpdf"
-            );
+        ini_set('memory_limit', -1);
+        $this->composerRequire->require(['mpdf/mpdf']);
         return $this;
-    }
-
-    private function getRootDir()
-    {
-        return $this->directoryList->getRoot();
     }
 
     static public function isMpdfInstalled()
