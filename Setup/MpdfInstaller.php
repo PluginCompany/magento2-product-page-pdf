@@ -25,7 +25,7 @@ class MpdfInstaller
     public function runInstall()
     {
         ini_set('memory_limit', -1);
-        $this->composerRequire->require(['mpdf/mpdf']);
+        $this->composerRequire->requirePackage(['mpdf/mpdf']);
         return $this;
     }
 

@@ -27,16 +27,16 @@ class ComposerRequire
     }
 
     /**
-     * Run 'composer remove'
+     * Run 'composer require'
      *
      * @param array $packages
      * @throws \Exception
      *
      * @return string
      */
-    public function require(array $packages)
+    public function requirePackage(array $packages)
     {
-//        ini_set('memory_limit', -1);
+        ini_set('memory_limit', -1);
         $composerApplication = $this->composerApplicationFactory->create();
 
         return $composerApplication->runComposerCommand(
