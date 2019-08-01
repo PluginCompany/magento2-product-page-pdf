@@ -12,10 +12,10 @@ use PluginCompany\ProductPdf\Block\Pdf;
 
 class Header extends Pdf
 {
-
     protected $_template = 'PluginCompany_ProductPdf::pdf/header.phtml';
 
-    public function getStoreLogo(){
+    public function getStoreLogo()
+    {
         if ($this->getConfigFlag('default_img')) {
             return $this->getDefaultStoreLogoUrl();
         }
@@ -27,17 +27,30 @@ class Header extends Pdf
 
     public function getDefaultStoreLogoUrl()
     {
+        if($this->shouldUseAssetResourcePath()) {
+            return $this->getDefaultStoreLogoPath();
+        }
         return $this->_layout
             ->createBlock('\Magento\Theme\Block\Html\Header\Logo')
             ->getLogoSrc();
     }
 
+    private function getDefaultStoreLogoPath()
+    {
+        $folderName = \Magento\Config\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
+        $storeLogoPath = $this->_scopeConfig->getValue(
+            'design/header/logo_src',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $path = $folderName . '/' . $storeLogoPath;
+        if($storeLogoPath !== null && $this->getMediaDirectory()->isFile($path)) {
+            return $path;
+        }
+        return $this->getViewFileUrl('images/logo.svg');
+    }
+
     public function getCustomLogoUrl()
     {
-        $url = $this->_storeManager->getStore()->getBaseUrl('media')
-            . 'plugincompany/productpdf/'
-            . $this->getCustomLogoPath()
-            ;
         return $this->_storeManager->getStore()->getBaseUrl('media')
             . 'plugincompany/productpdf/'
             . $this->getCustomLogoPath()

@@ -295,10 +295,7 @@ class Pdf extends Template
 
     protected function _afterToHtml($html)
     {
-        if(!$this->getGroupConfigFlag('general/use_resource_path')) {
-            return parent::_afterToHtml($html);
-        }
-        if($this->getRequest()->getParam('html')) {
+        if(!$this->shouldUseAssetResourcePath()) {
             return parent::_afterToHtml($html);
         }
         $html = str_replace(
@@ -329,5 +326,22 @@ class Pdf extends Template
         return $this->directoryList->getPath('static') . '/';
     }
 
+    public function getViewFileUrl($fileId, array $params = [])
+    {
+        if($this->shouldUseAssetResourcePath()) {
+            return $this->_assetRepo->createAsset($fileId, $params)->getSourceFile();
+        }
+        return parent::getViewFileUrl($fileId, $params);
+    }
+
+    public function shouldUseAssetResourcePath()
+    {
+        return $this->getGroupConfigFlag('general/use_resource_path') && !$this->getRequest()->getParam('html');
+    }
+
+    public function printWindowEnabled()
+    {
+        return $this->getGroupConfigFlag('frontend/enable_print_window');
+    }
 
 }

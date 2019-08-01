@@ -76,4 +76,12 @@ interface PdfGeneratorInterface
      * @return $this
      */
     public function setHtmlFooter($value);
+
+    /**
+     * @param $js
+     * @return $this
+     */
+    public function setJs($js);
+
+
 }

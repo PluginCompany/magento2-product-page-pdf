@@ -62,6 +62,11 @@
                     <label>Custom CSS Classes</label>
                     <comment>Enter custom CSS classes separated by a space, for example: btn btn-primary pull-right</comment>
                 </field>
+                <field id="enable_print_window" sortOrder="900" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Print Window</label>
+                    <comment>Enable this to directly show a print window in the browser when a PDF is opened</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="general" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General PDF Settings</label>

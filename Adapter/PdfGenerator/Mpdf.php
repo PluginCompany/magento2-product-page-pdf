@@ -63,6 +63,7 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
         $this
             ->createMpdfWithSettings()
             ->addFooter()
+            ->addJs()
             ->addHtmlContent()
         ;
         return $this->getPdfContent();
@@ -134,6 +135,14 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
         return $this;
     }
 
+    private function addJs()
+    {
+        if($this->getJs()) {
+            $this->mpdf->SetJs($this->getJs());
+        }
+        return $this;
+    }
+
     private function addHtmlContent()
     {
         $this->mpdf->WriteHTML(
@@ -148,9 +157,6 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
         return $this->mpdf->buffer;
     }
 
-    /**
-     * @return string
-     */
     private function stream()
     {
         $this->mpdf->Output(urldecode($this->getFileName()), 'I');
@@ -204,5 +210,10 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
     public function setHtmlFooter($value)
     {
         return parent::setHtmlFooter($value);
+    }
+
+    public function setJs($js)
+    {
+        return parent::setJs($js);
     }
 }

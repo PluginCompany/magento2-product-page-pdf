@@ -14,6 +14,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Registry;
 use PluginCompany\ProductPdf\Adapter\PdfGenerator\Mpdf;
 use PluginCompany\ProductPdf\Adapter\PdfGenerator\PdfGeneratorInterface;
+use PluginCompany\ProductPdf\Block\Pdf;
 use PluginCompany\ProductPdf\Setup\FontDownloader;
 use Psr\Log\LoggerInterface;
 
@@ -41,6 +42,7 @@ class File extends Action {
 
     private $product;
 
+    /** @var Pdf */
     private $pdfBlock;
     /**
      * @var FontDownloader
@@ -181,6 +183,7 @@ class File extends Action {
     {
         try {
             $this->addFooterToPdf();
+            $this->enablePrintWindowIfApplicable();
             $this->streamPdf();
         }
         catch(\Throwable $e) {
@@ -238,6 +241,14 @@ class File extends Action {
             ->setMarginBottom(15)
             ->setHtmlFooter($this->getPdfBlock()->getFooterHtml())
         ;
+        return $this;
+    }
+
+    private function enablePrintWindowIfApplicable()
+    {
+        if($this->getPdfBlock()->printWindowEnabled()) {
+            $this->pdfGenerator->setJs('this.print();');
+        }
         return $this;
     }
 
