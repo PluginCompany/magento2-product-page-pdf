@@ -196,6 +196,7 @@ class File extends Action {
 
     private function handleError($e)
     {
+        $this->logger->critical($e->getMessage());
         if(stristr($e->getMessage(), 'Temporary files directory')){
             return $this->showTempFileWriteError();
         }
@@ -254,12 +255,12 @@ class File extends Action {
 
     private function streamPdf()
     {
-        $this->sendPdfHeaders();
         /** @var \Magento\Framework\App\Response\Http $response */
         $response = $this->getResponse();
         $response
             ->setContent($this->getRenderedPdfContent())
         ;
+        $this->sendPdfHeaders();
         return $response->sendResponse();
     }
 

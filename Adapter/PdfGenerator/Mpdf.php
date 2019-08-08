@@ -9,6 +9,7 @@ namespace PluginCompany\ProductPdf\Adapter\PdfGenerator;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\View\Element\AbstractBlock;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
@@ -45,28 +46,53 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
      * @var DirectoryList
      */
     private $directoryList;
+    /**
+     * @var File
+     */
+    private $io;
 
+    /**
+     * Mpdf constructor.
+     * @param FontReader $fontReader
+     * @param FontDirIO $fontDirIO
+     * @param DirectoryList $directoryList
+     * @param File $io
+     */
     public function __construct(
         FontReader $fontReader,
         FontDirIO $fontDirIO,
-        DirectoryList $directoryList
+        DirectoryList $directoryList,
+        File $io
     ) {
         $this->setData($this->defaults);
         $this->fontReader = $fontReader;
         $this->fontDirIO = $fontDirIO;
         $this->directoryList = $directoryList;
+        $this->io = $io;
     }
 
     public function generate(AbstractBlock $block)
     {
         $this->block = $block;
         $this
+            ->createMpdfTempDir()
             ->createMpdfWithSettings()
             ->addFooter()
             ->addJs()
             ->addHtmlContent()
         ;
         return $this->getPdfContent();
+    }
+
+    private function createMpdfTempDir()
+    {
+        $this->io->checkAndCreateFolder($this->getTempDirPath());
+        return $this;
+    }
+
+    private function getTempDirPath()
+    {
+        return $this->directoryList->getPath('tmp') . '/mpdf';
     }
 
     private function createMpdfWithSettings()
@@ -120,7 +146,7 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
     private function getTempDirConfig()
     {
         return [
-            'tempDir' => $this->directoryList->getPath('tmp') . '/mpdf'
+            'tempDir' => $this->getTempDirPath()
         ];
     }
 

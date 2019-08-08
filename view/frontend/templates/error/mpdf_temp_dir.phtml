@@ -25,12 +25,13 @@
         <div class="col-xs-12">
             <h4>Using SSH</h4>
             <p>You can do this by logging onto your server using SSH and navigating to your magento root folder</p>
-            <p>Run the following command: <code>chmod -Rf 777 ./vendor/mpdf/mpdf/tmp</code></p>
+            <p>Run the following command: <code>mkdir --parents ./var/cache/tmp/mpdf; chmod -Rf 777 ./var/cache/tmp/mpdf</code></p>
         </div>
         <div class="col-xs-12">
             <h4>Using FTP software</h4>
-            <p>Open your FTP software and navigate to the following directory on your server: <code>{magento_root}/vendor/mpdf/mpdf</code></p>
+            <p>Open your FTP software and navigate to the following directory on your server: <code>{magento_root}/var/cache/tmp/mpdf</code></p>
             <p>Right click the <code>tmp</code> folder and update permissions to write access for the web server user</p>
+            <p>If the directory doesn't exist, create it first.</p>
         </div>
         <div class="col-xs-12">
             <h4>Clear the full page cache</h4>
