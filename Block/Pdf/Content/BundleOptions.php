@@ -14,6 +14,8 @@ class BundleOptions extends Content
 {
     protected $_template = 'PluginCompany_ProductPdf::pdf/content/options/bundle.phtml';
 
+    private $bundleOptions;
+
     /**
      * Return an array of bundle product options
      *
@@ -21,10 +23,25 @@ class BundleOptions extends Content
      */
     public function getOptions()
     {
-        return $this->getLayout()
-            ->createBlock('Magento\Bundle\Block\Catalog\Product\View\Type\Bundle')
-            ->setProduct($this->getProduct())
-            ->getOptions();
+        if(!$this->bundleOptions) {
+            try {
+                $this->initBundleOptions();
+            }
+            catch(\Exception $e) {
+                $this->_logger->critical($e->getMessage());
+            }
+        }
+        return $this->bundleOptions;
+    }
+
+    private function initBundleOptions()
+    {
+        $this->bundleOptions =
+            $this->getLayout()
+                ->createBlock('Magento\Bundle\Block\Catalog\Product\View\Type\Bundle')
+                ->setProduct($this->getProduct())
+                ->getOptions();
+        return $this;
     }
 
     public function getFullImageUrl($path)
@@ -58,6 +75,14 @@ class BundleOptions extends Content
     private function getItemPrice($item)
     {
         return $item->getPrice();
+    }
+
+    protected function _toHtml()
+    {
+        if(!$this->getOptions()) {
+            return '';
+        }
+        return parent::_toHtml();
     }
 
 }

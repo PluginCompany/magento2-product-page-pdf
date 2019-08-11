@@ -1,3 +1,6 @@
+<?php
+/** @var \PluginCompany\ProductPdf\Block\Pdf\Content\BundleOptions $this */
+?>
 <?php if($this->getGroupConfigFlag('bundle_product/add_pagebreak')){ ?>
     <pagebreak />
 <?php } ?>
@@ -6,7 +9,11 @@
         <?php echo __('Product Options');?>
     </h3>
     <?php
-    foreach ($this->getOptions() as $optionGroup) { ?>
+    foreach ($this->getOptions() as $optionGroup) {
+        if(!$optionGroup->getSelections()) {
+            continue;
+        }
+    ?>
         <table autosize="1" class="product-options bundle-options-table">
             <tr>
                 <td class="bundle-option-subsection-title" colspan="2">
