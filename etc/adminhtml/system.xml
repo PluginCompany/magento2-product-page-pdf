@@ -435,6 +435,14 @@
                         <field id="show_additional_information">1</field>
                     </depends>
                 </field>
+                <field id="hide_boolean_no_attributes" translate="label" sortOrder="130" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Hide attributes with "No" value</label>
+                    <comment>If enabled, Yes/No attributes with "No" as value will be hidden</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="show_additional_information">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="configurable_product" translate="label" sortOrder="37" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Configurable Product Settings</label>

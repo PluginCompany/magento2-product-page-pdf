@@ -7,6 +7,9 @@
  */
 namespace PluginCompany\ProductPdf\Block\Pdf\Content;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\Phrase;
 use PluginCompany\ProductPdf\Block\Pdf\Content;
 
 class Attributes extends Content
@@ -36,13 +39,20 @@ class Attributes extends Content
             if(in_array($attribute->getAttributeCode(), $excludeAttr)){
                 continue;
             }
+            if(!$this->canShowBooleanNoAttributes() && $this->isBooleanNo($product, $attribute)) {
+                continue;
+            }
             $value = $attribute->getFrontend()->getValue($product);
+            if($value instanceof Phrase) {
+                $value = $value->render();
+            }
             if(is_string($value)) {
                 $value = trim($value);
             }
             if(!$this->canShowEmptyAttributes() && !$value){
                 continue;
             }
+
             if (!$product->hasData($attribute->getAttributeCode())) {
                 $value = __('N/A');
             } elseif ((string)$value == '') {
@@ -63,6 +73,19 @@ class Attributes extends Content
         return $this->additionalData;
     }
 
+    /**
+     * @param Product $product
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function isBooleanNo($product, $attribute)
+    {
+        if($attribute->getFrontendInput() == 'boolean' && $product->getData($attribute->getAttributeCode()) === "0") {
+            return true;
+        }
+        return false;
+    }
+
     protected function _beforeToHtml()
     {
         if(!$this->canRender()){
@@ -79,6 +102,11 @@ class Attributes extends Content
     public function canShowEmptyAttributes()
     {
         return !$this->getGroupConfigFlag('additional_information/hide_empty_attributes');
+    }
+
+    public function canShowBooleanNoAttributes()
+    {
+        return !$this->getGroupConfigFlag('additional_information/hide_boolean_no_attributes');
     }
 }
 
