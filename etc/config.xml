@@ -63,6 +63,7 @@
                 <filter_duplicate_images>1</filter_duplicate_images>
             </gallery>
             <configurable_product>
+                <use_child_product>1</use_child_product>
                 <show_configurable_product_options>1</show_configurable_product_options>
             </configurable_product>
             <grouped_product>

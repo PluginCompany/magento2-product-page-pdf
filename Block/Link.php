@@ -7,6 +7,9 @@
  */
 namespace PluginCompany\ProductPdf\Block;
 
+use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
@@ -59,12 +62,21 @@ class Link extends Template {
 
     public function getPdfUrl()
     {
-        return $this->pdfUrlBuilder
-            ->setProduct($this->getProduct())
-            ->setStoreId($this->getCurrentStoreId())
-            ->getPdfUrl();
+        return $this->getPdfUrlForProduct($this->getProduct());
     }
 
+    private function getPdfUrlForProduct($product)
+    {
+        return $this->pdfUrlBuilder
+            ->setProduct($product)
+            ->setStoreId($this->getCurrentStoreId())
+            ->getPdfUrl()
+            ;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Product
+     */
     private function getProduct()
     {
         return $this->registry->registry('product');
@@ -172,7 +184,8 @@ class Link extends Template {
         return [
             'linkSelector' => $this->getLinkPlacementClass(),
             'insertMethod' => $this->getInsertMethod(),
-
+            'childProductUrls' => $this->getConfigurableChildUrls(),
+            'mainProductUrl' => $this->getPdfUrl()
         ];
     }
 
@@ -203,11 +216,52 @@ class Link extends Template {
             );
     }
 
-    public function getInsertMethod(){
+    public function getInsertMethod()
+    {
         return $this->scopeConfig
             ->getValue(
                 'plugincompany_productpdf/frontend/link_placement_method',
                 ScopeInterface::SCOPE_STORE
             );
     }
+
+    private function getConfigurableChildUrls()
+    {
+        $product = $this->getProduct();
+        if($product->getTypeId() != 'configurable') {
+            return [];
+        }
+        if(!$this->useConfigurableChild()) {
+            return [];
+        }
+        $urls = [];
+        foreach($this->getChildProductCollection($product) as $child) {
+            /** @var Product $child */
+            $urls[$child->getId()] = $this->getPdfUrlForProduct($child);
+        }
+        return $urls;
+    }
+
+    private function useConfigurableChild()
+    {
+        return $this->scopeConfig
+            ->isSetFlag(
+                'plugincompany_productpdf/configurable_product/use_child_product',
+                ScopeInterface::SCOPE_STORE
+            );
+    }
+
+    /**
+     * @param $product
+     * @return Collection
+     */
+    private function getChildProductCollection($product)
+    {
+        return $product
+            ->getTypeInstance()
+            ->getUsedProductCollection($product)
+            ->addAttributeToSelect('name')
+            ;
+    }
+
 }
