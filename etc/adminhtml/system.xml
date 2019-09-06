@@ -176,6 +176,14 @@
                         <field id="show_header">1</field>
                     </depends>
                 </field>
+                <field id="show_barcode" translate="label" sortOrder="155" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show QR Code</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="show_header">1</field>
+                    </depends>
+                    <comment>If enabled, a QR Code with the product URL will be shown in the header.</comment>
+                </field>
                 <field id="header_fontsize" translate="label" sortOrder="160" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Header Text Font Size</label>
                     <source_model>PluginCompany\ProductPdf\Model\System\Config\Source\Fontsize</source_model>
@@ -533,7 +541,55 @@
                     </depends>
                 </field>
             </group>
-            <group id="footer" translate="label" sortOrder="41" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="qr_code" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>QR Code Settings</label>
+                <field id="show_qr_code" translate="label" sortOrder="100" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show QR Code</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When enabled, a barcode with the product URL will be displayed in the PDF.</comment>
+                </field>
+                <field id="add_pagebreak" translate="label" sortOrder="110" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show on New Page</label>
+                    <comment>Show this section on a new page instead of adding it to an existing page.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="show_qr_code">1</field>
+                    </depends>
+                </field>
+                <field id="enable_border" translate="label" sortOrder="120" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Border</label>
+                    <comment>Enable this to show a border around the QR Code</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="show_qr_code">1</field>
+                    </depends>
+                </field>
+                <field id="size" translate="label" sortOrder="130" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Size</label>
+                    <comment>Set the size of the QR Code element. Default size is 2.</comment>
+                    <validate>validate-digits validate-greater-than-zero required-entry</validate>
+                    <depends>
+                        <field id="show_qr_code">1</field>
+                    </depends>
+                </field>
+                <field id="margin_top" translate="label" sortOrder="140" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Margin Top</label>
+                    <comment>Margin above the QR Code element. Default is 50.</comment>
+                    <validate>validate-number required-entry</validate>
+                    <depends>
+                        <field id="show_qr_code">1</field>
+                    </depends>
+                </field>
+                <field id="margin_bottom" translate="label" sortOrder="150" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Margin Bottom</label>
+                    <comment>Margin below the QR Code element. Default is 50.</comment>
+                    <validate>validate-number required-entry</validate>
+                    <depends>
+                        <field id="show_qr_code">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="footer" translate="label" sortOrder="60" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>PDF Footer Settings</label>
                 <field id="show_footer" translate="label" sortOrder="100" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show Footer</label>

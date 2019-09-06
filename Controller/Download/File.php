@@ -86,6 +86,9 @@ class File extends Action {
         if(!$this->isMpdfInstalled()){
             return $this->showMpdfNotFoundError();
         }
+        if(!$this->isMpdfQrInstalled()){
+            return $this->showMpdfQrNotFoundError();
+        }
         $this
             ->downloadFontsIfNeeded()
             ->registerProduct()
@@ -99,6 +102,11 @@ class File extends Action {
     private function isMpdfInstalled()
     {
         return class_exists('Mpdf\Mpdf');
+    }
+
+    private function isMpdfQrInstalled()
+    {
+        return class_exists('Mpdf\QrCode\QrCode');
     }
 
     private function downloadFontsIfNeeded()
@@ -231,6 +239,18 @@ class File extends Action {
             )
             ->sendResponse()
             ;
+    }
+
+    private function showMpdfQrNotFoundError()
+    {
+        /** @var \Magento\Framework\App\Response\Http $response */
+        $response = $this->getResponse();
+        $response
+            ->setContent(
+                "<p>Please install the mPDF QR Code library on your server to view the PDF file. You can use the automatic installer in the admin area to finish the installation.</p>"
+            )
+            ->sendResponse()
+        ;
     }
 
     private function addFooterToPdf()

@@ -71,6 +71,11 @@ class Content extends Pdf
             case 'grouped-options':
                 return $this->getGroupedOptionsHtmlIfAllowed();
                 break;
+            case 'qr-code':
+                return $this->createChildBlockIfAllowed(
+                    'qr_code/show_qr_code',
+                    'Content\QrCode'
+                );
             case 'custom-options':
                 return $this->createChildBlockIfAllowed(
                     'custom_options/show_custom_options',

@@ -9,6 +9,7 @@ namespace PluginCompany\ProductPdf\Notification;
 
 use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\UrlInterface;
+use PluginCompany\ProductPdf\Setup\MpdfInstaller;
 
 /**
  * Class MpdfLibrary
@@ -46,10 +47,7 @@ class MpdfLibrary implements MessageInterface
      */
     public function isDisplayed()
     {
-        if(!class_exists('\\Mpdf\\Mpdf')){
-            return true;
-        }
-        return false;
+        return !MpdfInstaller::isMpdfInstalled();
     }
 
     /**

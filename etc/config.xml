@@ -22,6 +22,7 @@
                 <bottomline_color>999</bottomline_color>
                 <store_name_fontfamily>opensans</store_name_fontfamily>
                 <fontfamily>opensans</fontfamily>
+                <show_barcode>1</show_barcode>
             </header>
             <section_header>
                 <section_header_fontfamily>opensans</section_header_fontfamily>
@@ -107,8 +108,15 @@ display: block;
                 <show_bundle_product_options>1</show_bundle_product_options>
             </bundle_product>
             <sectionsort>
-                <sort_order>{"title-price":"Product Title and Price","image-gallery":"Image Gallery","short-description":"Short Description","description":"Description","product-attributes":"Additional Information","configurable-options":"Configurable Product Options","bundle-options":"Bundled Product Options","grouped-options":"Grouped Product Options","custom-options":"Custom Options"}</sort_order>
+                <sort_order>{"title-price":"Product Title and Price","image-gallery":"Image Gallery","short-description":"Short Description","description":"Description","product-attributes":"Additional Information","configurable-options":"Configurable Product Options","bundle-options":"Bundled Product Options","grouped-options":"Grouped Product Options","custom-options":"Custom Options","qr-code":"QR Code"}</sort_order>
             </sectionsort>
+            <qr_code>
+                <show_qr_code>1</show_qr_code>
+                <enable_border>1</enable_border>
+                <size>2</size>
+                <margin_top>50</margin_top>
+                <margin_bottom>50</margin_bottom>
+            </qr_code>
         </plugincompany_productpdf>
     </default>
 </config>

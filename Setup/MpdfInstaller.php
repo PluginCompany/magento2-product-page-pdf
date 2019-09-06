@@ -26,14 +26,18 @@ class MpdfInstaller
     {
         ini_set('memory_limit', -1);
         $this->composerRequire->requirePackage(['mpdf/mpdf']);
+        $this->composerRequire->requirePackage(['mpdf/qrcode']);
         return $this;
     }
 
     static public function isMpdfInstalled()
     {
-        if(class_exists('\\Mpdf\\Mpdf')){
-            return true;
+        if(!class_exists('\\Mpdf\\Mpdf')){
+            return false;
         }
-        return false;
+        if(!class_exists('\\Mpdf\\QrCode\\QrCode')){
+            return false;
+        }
+        return true;
     }
 }

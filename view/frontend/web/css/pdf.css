@@ -303,6 +303,18 @@ table.product-options th
     padding-right:0.5em;
 }
 
+/* QR CODE */
+.qr-code {
+    margin-top:50px;
+    margin-bottom:50px;
+}
+
+.header-qr-code {
+    float:right;
+    margin-top:-10px;
+    margin-right:-60px;
+}
+
 /* FOOTER */
 .footer {
     font-size:11px;
@@ -320,15 +332,12 @@ table.product-options th
     font-size:15px;
 }
 
-.product-link {
-}
-
 .footer .product-link-wrapper {
-    padding-left:15%;
-    padding-right:50px;
+    margin-left:15%;
+    padding-right:15%;
     margin-top:-25px;
     text-align:center;
-    width:65%;
+    width:70%;
 }
 
 .footer .timestamp-wrapper {
