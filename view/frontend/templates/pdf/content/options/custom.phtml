@@ -35,23 +35,25 @@ if (!empty($options)) {
                     <?php $i++; } ?>
 
                 <?php
-                foreach ($values as $value) {
-                    $data = $value->getData();
-                    $title = $data['title'];
-                    $price = $this->formatCurrency($data['price']);
-                    ?>
-                    <tr class="<?php echo $this->getRowClass($i); ?>">
-                        <td class="custom-option-title" colspan="2">
-                            <?php echo __($gtitle); ?>
-                        </td>
-                        <td><?php echo __($title); ?></td>
-                        <?php if($this->canShowPrice()) { ?>
-                            <td class="price"><p style="margin: 0 20px 0; "><?php echo $price; ?></p></td>
-                        <?php } ?>
-                    </tr>
-                    <?php
-                    $gtitle = '';
-                    $i++;
+                if ($values && (is_array($values) || is_object($values))) {
+                    foreach ($values as $value) {
+                        $data = $value->getData();
+                        $title = $data['title'];
+                        $price = $this->formatCurrency($data['price']);
+                        ?>
+                        <tr class="<?php echo $this->getRowClass($i); ?>">
+                            <td class="custom-option-title" colspan="2">
+                                <?php echo __($gtitle); ?>
+                            </td>
+                            <td><?php echo __($title); ?></td>
+                            <?php if($this->canShowPrice()) { ?>
+                                <td class="price"><p style="margin: 0 20px 0; "><?php echo $price; ?></p></td>
+                            <?php } ?>
+                        </tr>
+                        <?php
+                        $gtitle = '';
+                        $i++;
+                    }
                 }
             }
             ?>
