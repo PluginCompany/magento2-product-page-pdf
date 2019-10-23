@@ -70,6 +70,7 @@ class Media extends Content
             if($this->isMainProductImage($image->getFile())){
                 continue;
             }
+            $this->replaceImageWithPlaceholderIfNotExists($image);
             $mediaGallery->addItem($image);
         }
         $this->mediaGalleryImages = $mediaGallery;
@@ -88,6 +89,16 @@ class Media extends Content
     private function isMainProductImage($imagePath)
     {
         return $imagePath == $this->getProduct()->getImage();
+    }
+
+    private function replaceImageWithPlaceholderIfNotExists(DataObject $image)
+    {
+        if(!file_exists($this->getFullImagePath($image->getFile()))) {
+            $image->setUrl($this->getPlaceHolderUrl());
+            $image->setFile(false);
+        }
+        return $image;
+
     }
 
     private function addConfigurableChildImages()
@@ -126,6 +137,7 @@ class Media extends Content
             return $this;
         }
         foreach($product->getMediaGalleryImages() as $image) {
+            $this->replaceImageWithPlaceholderIfNotExists($image);
             $this->addImageToGalleryIfNotDuplicate($image);
         }
         return $this;
@@ -180,6 +192,9 @@ class Media extends Content
 
     private function areImagesTheSame($a, $b)
     {
+        if(!file_exists($a) || !file_exists($b)) {
+            return false;
+        }
         $result = $this->getImageCompare()
             ->compare($a, $b);
         return $result < 3;
@@ -208,7 +223,11 @@ class Media extends Content
             return false;
         }
 
-        $url = $this->getFullProductImageUrl($product->getImage());
+        $url = $this->getPlaceHolderUrl();
+        if(file_exists($this->getFullImagePath($product->getImage()))) {
+            $url = $this->getFullProductImageUrl($product->getImage());
+        }
+
         return new DataObject(['url' => $url, 'file' => $product->getImage()]);
     }
 
