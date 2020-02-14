@@ -299,16 +299,26 @@ class Pdf extends Template
             return parent::_afterToHtml($html);
         }
         $html = str_replace(
-            [$this->getStaticUrl(), $this->getMediaUrl()],
-            [$this->getStaticPath(), $this->getMediaPath()],
+            [
+                $this->getStaticUrl(false),
+                $this->getStaticUrl(true),
+                $this->getMediaUrl(false),
+                $this->getMediaUrl(true)
+            ],
+            [
+                $this->getStaticPath(),
+                $this->getStaticPath(),
+                $this->getMediaPath(),
+                $this->getMediaPath()
+            ],
             $html
         );
         return parent::_afterToHtml($html);
     }
 
-    private function getMediaUrl()
+    private function getMediaUrl($secure = false)
     {
-        return $this->_storeManager->getStore()->getBaseUrl('media');
+        return $this->_storeManager->getStore()->getBaseUrl('media', $secure);
     }
 
     private function getMediaPath()
@@ -316,9 +326,9 @@ class Pdf extends Template
         return $this->directoryList->getPath('media') . '/';
     }
 
-    private function getStaticUrl()
+    private function getStaticUrl($secure = false)
     {
-        return $this->_storeManager->getStore()->getBaseUrl('static');
+        return $this->_storeManager->getStore()->getBaseUrl('static', $secure);
     }
 
     private function getStaticPath()
