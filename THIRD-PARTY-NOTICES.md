@@ -17,4 +17,4 @@ The following files are copies or adaptations of Magento Open Source files and k
 
 ## Composer dependencies (not bundled)
 
-- `mpdf/mpdf` (~7.0): GPL-2.0-only - not bundled; installed by Composer. Distributing a combined work must respect the GPL.
+- `mpdf/mpdf` (~8.0): GPL-2.0-only - not bundled; installed by Composer. Distributing a combined work must respect the GPL.
