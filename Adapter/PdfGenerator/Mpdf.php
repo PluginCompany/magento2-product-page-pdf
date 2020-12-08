@@ -108,6 +108,8 @@ class Mpdf extends DataObject implements PdfGeneratorInterface
         );
         $this->mpdf->useSubstitutions = true;
         $this->mpdf->use_kwt = true;
+        $this->mpdf->useActiveForms = true;
+        $this->mpdf->percentSubset = 5;
         return $this;
     }
 

@@ -18,6 +18,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PluginCompany\ProductPdf\Model\Product\PdfUrl;
+use Magento\ConfigurableProduct\Helper\Data as ConfigurableProductHelper;
 
 class Link extends Template {
 
@@ -41,11 +42,18 @@ class Link extends Template {
      * @var PdfUrl
      */
     private $pdfUrlBuilder;
+    /**
+     * @var ConfigurableProductHelper
+     */
+    private $configurableProductHelper;
+
+    private $childProducts;
 
     public function __construct(
         Context $context,
         Registry $registry,
         PdfUrl $pdfUrlBuilder,
+        ConfigurableProductHelper $configurableProductHelper,
         array $data = []
     ){
         $this->storeManager = $context->getStoreManager();
@@ -58,6 +66,7 @@ class Link extends Template {
             $data
         );
         $this->setTemplate('PluginCompany_ProductPdf::link.phtml');
+        $this->configurableProductHelper = $configurableProductHelper;
     }
 
     public function getPdfUrl()
@@ -185,7 +194,9 @@ class Link extends Template {
             'linkSelector' => $this->getLinkPlacementClass(),
             'insertMethod' => $this->getInsertMethod(),
             'childProductUrls' => $this->getConfigurableChildUrls(),
-            'mainProductUrl' => $this->getPdfUrl()
+            'mainProductUrl' => $this->getPdfUrl(),
+            'optionsMap' => $this->getConfigurableOptionProductMap(),
+            'childLinkUrlEnabled' => $this->isConfigurableChildLinkUrlEnabled()
         ];
     }
 
@@ -235,7 +246,10 @@ class Link extends Template {
             return [];
         }
         $urls = [];
-        foreach($this->getChildProductCollection($product) as $child) {
+
+        $this->getConfigurableOptionProductMap();
+
+        foreach($this->getChildProductCollection() as $child) {
             /** @var Product $child */
             $urls[$child->getId()] = $this->getPdfUrlForProduct($child);
         }
@@ -251,17 +265,52 @@ class Link extends Template {
             );
     }
 
+    private function getConfigurableOptionProductMap()
+    {
+        if($this->getProduct()->getTypeId() != 'configurable') {
+            return [];
+        }
+        if(!$this->useConfigurableChild()) {
+            return [];
+        }
+        $options = $this->configurableProductHelper->getOptions($this->getProduct(), $this->getChildProductCollection());
+
+        if(!isset($options['index'])) return [];
+
+        return $options['index'];
+    }
+
+    private function isConfigurableChildLinkUrlEnabled()
+    {
+        return $this->getProduct()->getTypeId() == 'configurable' && $this->useConfigurableChild();
+    }
+
     /**
      * @param $product
      * @return Collection
      */
-    private function getChildProductCollection($product)
+    private function getChildProductCollection()
     {
-        return $product
-            ->getTypeInstance()
-            ->getUsedProductCollection($product)
-            ->addAttributeToSelect('name')
-            ;
+        if(!$this->hasChildProducts()) {
+            $this->setChildProducts($this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null));
+        }
+        return $this->getChildProducts();
+    }
+
+    private function getChildProducts()
+    {
+        return $this->childProducts;
+    }
+
+    private function hasChildProducts()
+    {
+        return isset($this->childProducts);
+    }
+
+    private function setChildProducts($value)
+    {
+        $this->childProducts = $value;
+        return $this;
     }
 
 }

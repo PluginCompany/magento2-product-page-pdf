@@ -14,9 +14,18 @@ define([
             this.childUrls = config.childProductUrls;
             this.mainUrl = this.mainProductUrl;
             this.node = $(node);
+            this.optionsMap = config.optionsMap;
 
+            if(config.childLinkUrlEnabled) {
+                this.attachConfigurableProductEventHandler();
+            }
+        },
+        attachConfigurableProductEventHandler: function() {
             var self = this;
-            $( ".product-options-wrapper div" ).click(function() {
+            $(".product-options-wrapper div" ).click(function() {
+                self.setPdfLinkUrl();
+            });
+            $(".product-options-wrapper select, .product-options-wrapper input" ).change(function() {
                 self.setPdfLinkUrl();
             });
         },
@@ -24,28 +33,27 @@ define([
             this.node.prop('href', this.getSelectedUrl());
         },
         getSelectedUrl: function() {
-            var selected_options = {};
-            $('div.swatch-attribute').each(function(k,v){
-                var attribute_id    = jQuery(v).attr('attribute-id');
-                var option_selected = jQuery(v).attr('option-selected');
-                if(!attribute_id || !option_selected){ return;}
-                selected_options[attribute_id] = option_selected;
-            });
+            var selectedOptions = this.getSelectedConfigurableOptions();
 
-            var product_id_index = jQuery('[data-role=swatch-options]').data('mageSwatchRenderer').options.jsonConfig.index;
-            var found_id;
-            $.each(product_id_index, function(product_id,attributes){
-                var productIsSelected = function(attributes, selected_options){
-                    return _.isEqual(attributes, selected_options);
-                }
-                if(productIsSelected(attributes, selected_options)){
-                    found_id = product_id
-                }
-            });
+            if(!selectedOptions) return this.mainUrl;
+
+            var found_id = _.findKey(this.optionsMap, selectedOptions);
             if(found_id && typeof this.childUrls[found_id] != 'undefined') {
                 return this.childUrls[found_id];
             }
             return this.mainUrl;
+        },
+        getSelectedConfigurableOptions: function(){
+            if(!jQuery('#product_addtocart_form [name^=super_attribute]').length) {
+                return false;
+            }
+            var selectedOptions = {};
+            jQuery('#product_addtocart_form [name^=super_attribute]').each(function(){
+                var attributeId = jQuery(this).attr('name').replace(/\D/g,'');
+                var optionId = jQuery(this).val();
+                selectedOptions[attributeId] = optionId.toString();
+            });
+            return selectedOptions;
         }
     });
 });

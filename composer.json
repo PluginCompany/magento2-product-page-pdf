@@ -7,7 +7,7 @@
         "mpdf/qrcode": "1.0.0"
     },
     "type": "magento2-module",
-    "version": "100.11.7",
+    "version": "100.11.8",
     "license": "MIT",
     "homepage": "https://plugin.company/magento-extensions/product-page-pdf.html",
     "support": {
