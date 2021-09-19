@@ -33,6 +33,7 @@ class PdfUrl
      * @var Url
      */
     private $urlBuilder;
+    private $parentProductId;
 
     /**
      * PdfUrl constructor.
@@ -84,18 +85,37 @@ class PdfUrl
         return $this;
     }
 
+    public function getParentProductId()
+    {
+        return $this->parentProductId;
+    }
+
+    public function hasParentProductId()
+    {
+        return isset($this->parentProductId);
+    }
+
+    public function setParentProductId($value)
+    {
+        $this->parentProductId = $value;
+        return $this;
+    }
+
     private function getPdfUrlForCurrentScope()
     {
         $this->urlBuilder->setScope($this->getFrontendStore());
+        $params =
+            [
+                'id' => $this->getProductId(),
+                'name' => $this->getFileName(),
+                '_secure' => $this->isSecure(),
+                '_nosid' => true
+            ];
+        if($this->getParentProductId()) {
+            $params = ['parent_id' => $this->getParentProductId()] + $params;
+        }
         return $this->urlBuilder
-            ->getUrl('productpdf/download/file',
-                [
-                    'id' => $this->getProductId(),
-                    'name' => $this->getFileName(),
-                    '_secure' => $this->isSecure(),
-                    '_nosid' => true
-                ]
-            );
+            ->getUrl('productpdf/download/file', $params);
     }
 
     private function getFileName()

@@ -79,6 +79,7 @@ class Link extends Template {
         return $this->pdfUrlBuilder
             ->setProduct($product)
             ->setStoreId($this->getCurrentStoreId())
+            ->setParentProductId($product->getParentId())
             ->getPdfUrl()
             ;
     }

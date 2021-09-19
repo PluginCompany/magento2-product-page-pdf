@@ -159,6 +159,16 @@ class Pdf extends Template
         return $this->getProduct()->getTypeId() == 'configurable';
     }
 
+    public function getParentProduct()
+    {
+        return $this->getProduct()->getParentProduct();
+    }
+
+    public function productHasParent()
+    {
+        return $this->getProduct()->getParentProduct() !== null;
+    }
+
     public function getConfigurableProductChildren()
     {
         return $this->getProduct()
@@ -279,10 +289,19 @@ class Pdf extends Template
 
     public function getFullProductImageUrl($path)
     {
+        $path = $this->addDsToPath($path);
         return $this->_storeManager->getStore()->getBaseUrl('media')
             . 'catalog/product'
             . $path
             ;
+    }
+
+    public function addDsToPath($path)
+    {
+        if(substr($path, 0, 1) != DIRECTORY_SEPARATOR) {
+            $path = DIRECTORY_SEPARATOR . $path;
+        }
+        return $path;
     }
 
     /**

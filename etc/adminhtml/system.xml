@@ -369,6 +369,14 @@
                         <field id="show_images">1</field>
                     </depends>
                 </field>
+                <field id="add_parent_images" translate="label" sortOrder="135" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Configurable Parent Images</label>
+                    <comment>Add the images of parent products to configurable child product media gallery.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="show_images">1</field>
+                    </depends>
+                </field>
                 <field id="filter_duplicate_images" translate="label" sortOrder="140" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Filter Duplicate Images</label>
                     <comment>Automatically filter out duplicate product images.</comment>

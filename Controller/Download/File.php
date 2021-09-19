@@ -179,12 +179,32 @@ class File extends Action {
     {
         $this->product = $this->catalogProductFactory->create()
             ->load($this->getProductId());
+        $this->addParentProductToProduct();
+        if($this->getParentProductId()) {
+            $this->addParentProductToProduct();
+        }
+        return $this;
+    }
+
+    private function addParentProductToProduct()
+    {
+        $this->product->setParentProduct(
+            $this->catalogProductFactory->create()
+                ->load(
+                    $this->getParentProductId()
+                )
+        );
         return $this;
     }
 
     private function getProductId()
     {
         return $this->getRequest()->getParam('id');
+    }
+
+    private function getParentProductId()
+    {
+        return $this->getRequest()->getParam('parent_id');
     }
 
     private function generatePdf()

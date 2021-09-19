@@ -77,6 +77,9 @@ class Media extends Content
         if($this->getConfig('add_child_images')){
             $this->addConfigurableChildImages();
         }
+        if($this->getConfig('add_parent_images')){
+            $this->addConfigurableParentImages();
+        }
         $this->mediaGalleryImages = new \LimitIterator($this->mediaGalleryImages->getIterator(),0, $this->getMaxAllowedGalleryImages());
         return $this;
     }
@@ -109,6 +112,17 @@ class Media extends Content
         foreach($this->getConfigurableProductChildren() as $child) {
             $this->addProductImagesToCurrentMediaGallery($child);
         }
+        return $this;
+    }
+
+    private function addConfigurableParentImages()
+    {
+        if(!$this->productHasParent())
+            return $this;
+
+        $this->addProductImagesToCurrentMediaGallery(
+            $this->getParentProduct()
+        );
         return $this;
     }
 
@@ -178,7 +192,7 @@ class Media extends Content
 
     private function getFullImagePath($imagePath)
     {
-        $path = $this->getProductMediaBaseDir() . $imagePath;
+        $path = $this->getProductMediaBaseDir() . $this->addDsToPath($imagePath);
         return $path;
     }
 
