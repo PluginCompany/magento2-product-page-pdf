@@ -17,7 +17,7 @@ class Media extends Content
     protected $_template = 'PluginCompany_ProductPdf::pdf/content/media/wrapper.phtml';
 
     /**
-     * @var Collection
+     * @var \LimitIterator
      */
     private $mediaGalleryImages;
 
@@ -91,7 +91,11 @@ class Media extends Content
 
     private function isMainProductImage($imagePath)
     {
-        return $imagePath == $this->getProduct()->getImage();
+        $mainImage = $this->getProduct()->getImage();
+        if(!$mainImage && $this->productHasParent() && $this->getConfig('add_parent_images')){
+            $mainImage = $this->getParentProduct()->getImage();
+        }
+        return $imagePath == $mainImage;
     }
 
     private function replaceImageWithPlaceholderIfNotExists(DataObject $image)
@@ -176,11 +180,16 @@ class Media extends Content
         if(!is_null($this->mediaGalleryImages->getItemByColumnValue('file', $imagePath))){
             return true;
         }
+
         $path1 = $this->getFullImagePath($imagePath);
-        $mainImagePath = $this->getFullImagePath($this->getMainImage()->getFile());
-        if($this->areImagesTheSame($path1, $mainImagePath)){
-            return true;
+
+        if($this->getMainImage()) {
+            $mainImagePath = $this->getFullImagePath($this->getMainImage()->getFile());
+            if($this->areImagesTheSame($path1, $mainImagePath)){
+                return true;
+            }
         }
+
         foreach($this->mediaGalleryImages as $image) {
             $path2 = $this->getFullImagePath($image->getFile());
             if($this->areImagesTheSame($path1, $path2)){
@@ -232,6 +241,29 @@ class Media extends Content
         if(!$product){
             $product = $this->getProduct();
         }
+
+        if(!$product->getImage() || $product->getImage() == 'no_selection'){
+            if($this->getConfig('add_parent_images')) {
+                return $this->getParentProductMainImage();
+            }
+            return false;
+        }
+
+        $url = $this->getPlaceHolderUrl();
+        if(file_exists($this->getFullImagePath($product->getImage()))) {
+            $url = $this->getFullProductImageUrl($product->getImage());
+        }
+
+        return new DataObject(['url' => $url, 'file' => $product->getImage()]);
+    }
+
+    public function getParentProductMainImage()
+    {
+        if(!$this->productHasParent()){
+            return false;
+        }
+
+        $product = $this->getParentProduct();
 
         if(!$product->getImage() || $product->getImage() == 'no_selection'){
             return false;
@@ -320,6 +352,7 @@ class Media extends Content
         if($this->getMainImage()){
             return $this->getMainImage()->getUrl();
         }
+
         return $this->getPlaceHolderUrl();
     }
 
