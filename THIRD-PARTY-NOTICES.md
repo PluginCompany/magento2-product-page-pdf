@@ -18,4 +18,4 @@ The following files are copies or adaptations of Magento Open Source files and k
 ## Composer dependencies (not bundled)
 
 - `mpdf/mpdf` (8.0.4 - 9.0.0): GPL-2.0-only - not bundled; installed by Composer. Distributing a combined work must respect the GPL.
-- `mpdf/qrcode` (1.0.0): see the package for its license - not bundled; installed by Composer.
+- `mpdf/qrcode` (^1.1.1): see the package for its license - not bundled; installed by Composer.
