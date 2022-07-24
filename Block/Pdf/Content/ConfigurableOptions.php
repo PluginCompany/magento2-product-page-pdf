@@ -32,6 +32,9 @@ class ConfigurableOptions extends Content
         if (!$value['use_default_value']){
             return '';
         }
+        if(!isset($value['pricing_value'])) {
+            return '';
+        }
 
         if ($value['pricing_value']>0) {
             $text = $value['pricing_value'];

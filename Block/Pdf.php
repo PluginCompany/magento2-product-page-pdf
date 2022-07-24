@@ -223,10 +223,14 @@ class Pdf extends Template
 
     public function getGroupConfig($config)
     {
-        return $this->_scopeConfig->getValue(
+        $value = $this->_scopeConfig->getValue(
             'plugincompany_productpdf/' . $config, ScopeInterface::SCOPE_STORE,
             $this->_storeManager->getStore()->getId()
         );
+        if($value === null) {
+            return '';
+        }
+        return $value;
     }
 
     public function getGroupConfigFlag($configFlag)
